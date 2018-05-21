@@ -25,5 +25,5 @@ $(document).ready(function() {
     $("#mainJdPluginJs-menu").load("https://raw.githubusercontent.com/320215787/JF_demo/master/jd.html");
   //  $("#mainTbPluginJs-menu").load("https://raw.githubusercontent.com/320215787/JF_demo/master/tb.html");
     console.log("MAIN JS laod");
-}); <
-/script>
+}); 
+</script>
