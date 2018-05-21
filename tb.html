@@ -21,7 +21,7 @@
     <h4>
         淘宝订单数据同步
         <span><a id="shopName"></a>
-        <button id="shop1ImportBtn">同步</button>
+        <button id="shopTbImportBtn">同步</button>
         <a id="total"></a></span>
 
     </h4>
@@ -408,7 +408,7 @@
         }
 
         function importOrderListBtnBind() {
-            $("#shop1ImportBtn", self.parent.frames["mainFrame"].document).bind("click", function() {
+            $("#shopTbImportBtn", self.parent.frames["mainFrame"].document).bind("click", function() {
                 importOrderList();
             })
         }
