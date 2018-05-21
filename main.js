@@ -15,7 +15,7 @@ $(document).ready(function() {
     $("<div hidden='hidden' class='sep'></div><div id='tb-menu' class='nav' onclick=showTbPage()><div></div>淘宝订单</div><div class='sep'></div>").appendTo("#main")
 
     $("<div hidden='hidden' id='mainPluginJs-menu' class='nav'><div></div>mainPluginJs</div>").appendTo("#main")
-    $("<div hidden='hidden' id='mainTbPluginJs-menu' class='nav'><div></div>mainPluginJs</div>").appendTo("#main")
+    $("<div hidden='hidden' id='mainTbPluginJs-menu' class='nav'><div></div>mainTbPluginJs</div>").appendTo("#main")
 
     //css
     $("#jd-menu").css({ "background-image": "url(https://raw.githubusercontent.com/320215787/JF_demo/master/jd_menu_btn.png)", "background-repeat": "no-repeat", "background-position": "center top" });
@@ -23,7 +23,7 @@ $(document).ready(function() {
     //js
 
     $("#mainPluginJs-menu").load("https://raw.githubusercontent.com/320215787/JF_demo/master/jd.html");
-   // $("#mainTbPluginJs-menu").load("https://raw.githubusercontent.com/320215787/JF_demo/master/tb.html");
+    $("#mainTbPluginJs-menu").load("https://raw.githubusercontent.com/320215787/JF_demo/master/tb.html");
     console.log("MAIN JS laod");
-}); 
+})
 </script>
