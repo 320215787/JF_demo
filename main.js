@@ -1,5 +1,5 @@
-< script type = "text/javascript" >
-    function showJdPage() {
+<script type="text/javascript">
+   function showJdPage() {
         self.parent.frames["mainFrame"].document.body.innerHTML = "<div id='mainJDDiv'  style='overflow:scroll'></div>";
         $("#mainJDDiv", self.parent.frames["mainFrame"].document).load("https://raw.githubusercontent.com/320215787/JF_demo/master/jd.html");
     }
