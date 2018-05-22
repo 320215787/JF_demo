@@ -473,8 +473,8 @@
                 url: url,
                 type: "get", //使用post方法
                 data: data,
-				dataType: 'jsonp',
-				jsonp: "callback",
+				dataType: 'json',
+				//jsonp: "callback",
                 success: function(data) {
 				console.log(data)
                     var pageReslut = JSON.parse(data).jingdong_pop_order_search_responce.searchorderinfo_result;
