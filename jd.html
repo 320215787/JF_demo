@@ -453,6 +453,7 @@
 
         function importOrderListBtnBind() {
             $("#shop1ImportBtn", self.parent.frames["mainFrame"].document).bind("click", function() {
+				console.log("同步数据")
                 importOrderList();
             })
         }
