@@ -471,8 +471,10 @@
             }
             $.ajax({
                 url: url,
-                type: "post", //使用post方法
+                type: "get", //使用post方法
                 data: data,
+				dataType: 'jsonp',
+				jsonp: "callback",
                 success: function(data) {
                     var pageReslut = JSON.parse(data).jingdong_pop_order_search_responce.searchorderinfo_result;
                     console.log("getOrderPageData success，本页数据条数：" + pageReslut.orderInfoList.length);
