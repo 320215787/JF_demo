@@ -467,7 +467,7 @@
                 "page": page,
                 "size": pageSize,
                 "orderState": "WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,TRADE_CANCELED,LOCKED",
-                //"optionalFields": "pin,orderTotalPrice,orderState,paymentConfirmTime,orderStartTime,consigneeInfo,vatInfo,itemInfoList,invoiceInfo,orderRemark,venderRemark,orderSource,modified"
+                "optionalFields": "pin,order_total_price,order_state,payment_confirm_time,order_start_time,consignee_info,vat_invoice_info,item_info_list,invoice_info,order_remark,vender_remark,order_source,modified"
             }
 			console.log(data)
             $.ajax({
@@ -764,8 +764,8 @@
                     var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
                         return templateDefinition.convertToOrderTemplateEntity(order);
                     });
-                    //orderEntityListConvertFromJDOrderList 待传入JF数据List
-                    //console.log("orderEntityListConvertFromJDOrderList:"+JSON.stringify(orderEntityListConvertFromJDOrderList));
+                    orderEntityListConvertFromJDOrderList 待传入JF数据List
+                    console.log("orderEntityListConvertFromJDOrderList:"+JSON.stringify(orderEntityListConvertFromJDOrderList));
 
                     orderEntityListConvertFromJDOrderList.forEach(function(jdOrderEntity) {
                         jdOrderEntity.key = templateDefinition.orderTemplateFieldKeys.orderId;
