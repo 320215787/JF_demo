@@ -310,30 +310,34 @@
         console.log("load");
         //region jd全局配置
         var shopConfigs = [{
-            id: "A 宜宇汽车",
+			id: "C JF旗舰",
             app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
-            //access_token:"6a47cb0d-ef17-4a64-8ca0-44128655c6b8"
-            //access_token:"5d2a449c-6de0-40c3-9649-df0c07b6aa64",
-            access_token: "5992927e-08ce-4a74-bbcb-e32b132ad326",
-            shopName: "-"
+            access_token: "5d2a449c-6de0-40c3-9649-df0c07b6aa64",
+            shopName: "9F官方旗舰店"
+            
         }, {
             id: "B 考拉家族",
             app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
             access_token: "f56a899b-3471-42b9-ba0a-73ca258313e4",
-            shopName: "-"
+            shopName: "考拉家族旗舰店"
         }, {
-            id: "C JF旗舰",
+            id: "A 宜宇汽车",
+            app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
+            access_token: "5992927e-08ce-4a74-bbcb-e32b132ad326",
+            shopName: "宜宇车品专营店"
+        }, {
+            id: "C 九孚旗舰店",
             app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
             access_token: "5d2a449c-6de0-40c3-9649-df0c07b6aa64",
-            shopName: "-"
+            shopName: "九孚旗舰店"
         }];
 
         var shopConfig = shopConfigs[0];
 
-       /* function loginShop(thisShopConfig, success) {
+        function loginShop(thisShopConfig, success) {
             shopConfig = thisShopConfig;
             console.log("loadShop " + shopConfig.id);
-            var urlLoadShop = "https://api.jd.com/routerjson?v=2.0&method=jingdong.vender.shop.query&app_key=" + shopConfig.app_key + "&access_token=" + shopConfig.access_token + "&360buy_param_json={}&timestamp=2018-04-04 21:58:17&sign=F2A3CBC5205B7970AFD2A3B12F49A8B3";
+           /* var urlLoadShop = "https://api.jd.com/routerjson?v=2.0&method=jingdong.vender.shop.query&app_key=" + shopConfig.app_key + "&access_token=" + shopConfig.access_token + "&360buy_param_json={}&timestamp=2018-04-04 21:58:17&sign=F2A3CBC5205B7970AFD2A3B12F49A8B3";
             $.ajax({
                 url: urlLoadShop,
                 success: function(data) {
@@ -346,23 +350,24 @@
                     });
                     success(thisShopConfig.shopName);
                 }
-            });
+            });*/
+			success(thisShopConfig.shopName);
         }
 
         function loadShop(thisShopConfig) {
             shopConfig = thisShopConfig;
             console.log("loadShop " + shopConfig.id);
-            var urlLoadShop = "https://api.jd.com/routerjson?v=2.0&method=jingdong.vender.shop.query&app_key=" + shopConfig.app_key + "&access_token=" + shopConfig.access_token + "&360buy_param_json={}&timestamp=2018-04-04 21:58:17&sign=F2A3CBC5205B7970AFD2A3B12F49A8B3";
-            $.ajax({
-                url: urlLoadShop,
-                success: function(data) {
-                    jdResponseCheck(data);
-                    thisShopConfig.shopName = JSON.parse(data).jingdong_vender_shop_query_responce.shop_jos_result.shop_name;
+            //var urlLoadShop = "https://api.jd.com/routerjson?v=2.0&method=jingdong.vender.shop.query&app_key=" + shopConfig.app_key + "&access_token=" + shopConfig.access_token + "&360buy_param_json={}&timestamp=2018-04-04 21:58:17&sign=F2A3CBC5205B7970AFD2A3B12F49A8B3";
+            //$.ajax({
+            //    url: urlLoadShop,
+            //    success: function(data) {
+            //        jdResponseCheck(data);
+            //        thisShopConfig.shopName = JSON.parse(data).jingdong_vender_shop_query_responce.shop_jos_result.shop_name;
                     $("#shopName", self.parent.frames["mainFrame"].document).html(thisShopConfig.shopName);
                     getOrderPage(1, pageSize);
-                }
-            });
-        }*/
+             //  }
+           // });
+        }
         //endregion
 
         // region 数据展示页面
