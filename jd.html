@@ -650,8 +650,8 @@
                 orderEntity[templateDefinition.orderTemplateFieldKeys.mobile] = order.consigneeInfo.mobile;
 
                 orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceInfo] = order.invoiceInfo;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceEasyInfo.invoiceTitle;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceEasyInfo.invoiceCode;
+                //orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceEasyInfo.invoiceTitle;
+                //orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceEasyInfo.invoiceCode;
 
                 orderEntity[templateDefinition.orderTemplateFieldKeys.venderRemark] = order.venderRemark;
                 orderEntity[templateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
@@ -755,7 +755,7 @@
                 return;
             }
             shopConfig = shopConfigs[shopIndex++];
-            //loginShop(shopConfig, function(name) {
+            loginShop(shopConfig, function(name) {
                 console.log("downloadOrderList");
                 getOrderList(function(orderList) {
                     console.log("getOrderList抓取京东全部未完成订单完毕,size:" + orderList.length);
