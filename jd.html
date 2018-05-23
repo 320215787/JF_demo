@@ -490,7 +490,7 @@
             var pageIndex = 1;
             var pageSize = 50;
             var orderlist = [];
-            getOrderPageData(1, 1, function(pageReslut) {
+            getOrderPageData(1, 10, function(pageReslut) {
                 var total = pageReslut.orderTotal;
                 console.log("getOrderList 探测到总数：" + total + ",分批数" + (1 + parseInt(total / pageSize)));
                 for (var i = 1; i < parseInt(total / pageSize) + 2; i++) {
