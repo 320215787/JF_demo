@@ -755,7 +755,7 @@
                 return;
             }
             shopConfig = shopConfigs[shopIndex++];
-            loginShop(shopConfig, function(name) {
+           // loginShop(shopConfig, function(name) {
                 console.log("downloadOrderList");
                 getOrderList(function(orderList) {
                     console.log("getOrderList抓取京东全部未完成订单完毕,size:" + orderList.length);
@@ -839,7 +839,7 @@
                             }
                         });
                     });
-               })
+              // })
             })
 
 
