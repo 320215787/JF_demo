@@ -880,6 +880,7 @@
             $.ajax({
                 url: url,
                 type: "post", //使用post方法
+				dataType: 'json',
                 data: {
                     "preNum": "1",
                     "customerCode": customerCode,
@@ -888,7 +889,7 @@
                 success: function(data) {
                     console.log("0");
                     console.log(data);
-                    var deliverCode = JSON.parse(data).jingdong_etms_waybillcode_get_responce.resultInfo.deliveryIdList[0];
+                    var deliverCode = data[0];
                     console.log("分配的运单号是：" + deliverCode);
                     var row = {};
                     row[templateDefinition.orderTemplateFieldKeys.deliverInfoCode] = deliverCode;
