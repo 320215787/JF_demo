@@ -311,35 +311,34 @@
         //region jd全局配置
         var shopConfigs = [{
 			id: "C JF旗舰",
-            app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
-            access_token: "5d2a449c-6de0-40c3-9649-df0c07b6aa64",
+            appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
+            accessToken: "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
             shopName: "9F官方旗舰店"
-            
         }
-		/*, {
+		, {
             id: "B 考拉家族",
-            app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
-            access_token: "f56a899b-3471-42b9-ba0a-73ca258313e4",
+            appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
+            accessToken: "4d50f340-8490-4745-8ed6-b71f5714f5d8",
             shopName: "考拉家族旗舰店"
         }, {
             id: "A 宜宇汽车",
-            app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
-            access_token: "5992927e-08ce-4a74-bbcb-e32b132ad326",
+            appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
+            accessToken: "bf13ed28-e230-4444-b3c4-983aae14d815",
             shopName: "宜宇车品专营店"
         }, {
             id: "C 九孚旗舰店",
-            app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
-            access_token: "5d2a449c-6de0-40c3-9649-df0c07b6aa64",
+            appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
+            accessToken: "e55597f5-e90b-4106-9c3d-4ccce1be7b39",
             shopName: "九孚旗舰店"
-        }*/
+        }
 		];
 
         var shopConfig = shopConfigs[0];
-
-        function loginShop(thisShopConfig, success) {
+		
+       /* function loginShop(thisShopConfig, success) {
             shopConfig = thisShopConfig;
             console.log("loadShop " + shopConfig.id);
-           /* var urlLoadShop = "https://api.jd.com/routerjson?v=2.0&method=jingdong.vender.shop.query&app_key=" + shopConfig.app_key + "&access_token=" + shopConfig.access_token + "&360buy_param_json={}&timestamp=2018-04-04 21:58:17&sign=F2A3CBC5205B7970AFD2A3B12F49A8B3";
+            var urlLoadShop = "https://api.jd.com/routerjson?v=2.0&method=jingdong.vender.shop.query&app_key=" + shopConfig.app_key + "&access_token=" + shopConfig.access_token + "&360buy_param_json={}&timestamp=2018-04-04 21:58:17&sign=F2A3CBC5205B7970AFD2A3B12F49A8B3";
             $.ajax({
                 url: urlLoadShop,
                 success: function(data) {
@@ -352,9 +351,9 @@
                     });
                     success(thisShopConfig.shopName);
                 }
-            });*/
+            });
 			success(thisShopConfig.shopName);
-        }
+        }*/
 
         function loadShop(thisShopConfig) {
             shopConfig = thisShopConfig;
@@ -471,6 +470,8 @@
             //var urlGetOrder = 'https://api.jd.com/routerjson?v=2.0&method=jingdong.pop.order.search&app_key='+shopConfig.app_key+"&access_token="+shopConfig.access_token+'&360buy_param_json={"start_date":"","end_date":"","order_state":"WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,TRADE_CANCELED,LOCKED","optional_fields":"pin,orderTotalPrice,orderState,paymentConfirmTime,orderStartTime,consigneeInfo,vatInfo,itemInfoList,invoiceInfo,orderRemark,venderRemark,orderSource,modified","page":"'+page+'","page_size":"'+pageSize+'","sortType":"1","dateType":""}';
             var url = "http://114.67.70.80:8081/zboss/data/getOrderFromJD";
             var data = {
+				"accessToken":shopConfig.accessToken,
+				"appSecret":shopConfig.appSecret,
                 "page": page,
                 "size": pageSize,
                 "orderState": "WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,TRADE_CANCELED,LOCKED",
@@ -882,6 +883,8 @@
                 type: "post", //使用post方法
 				dataType: 'json',
                 data: {
+					"accessToken":shopConfig.accessToken,
+					"appSecret":shopConfig.appSecret,
                     "preNum": "1",
                     "customerCode": customerCode,
                     "orderType": "0"
@@ -940,6 +943,8 @@
                 url: url,
                 type: 'post',
                 data: {
+					"accessToken":shopConfig.accessToken,
+					"appSecret":shopConfig.appSecret,
                     "deliveryId": deliverInfoCode,
                     "salePlat": salePlat,
                     "customerCode": customerCode,
@@ -1024,6 +1029,8 @@
                 url: url,
                 type: 'post',
                 data: {
+					"accessToken":shopConfig.accessToken,
+					"appSecret":shopConfig.appSecret,
                     "logisticsId": deliverInfoLogisticsId,
                     "waybill": deliverInfoCode,
                     "orderId": orderId,

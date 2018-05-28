@@ -311,7 +311,7 @@
         console.log("load");
         //region jd全局配置
         var shopConfigs = [{
-            id: "A 宜宇汽车",
+            id: "A 九孚五金专营店",
             app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
             //access_token:"6a47cb0d-ef17-4a64-8ca0-44128655c6b8"
             //access_token:"5d2a449c-6de0-40c3-9649-df0c07b6aa64",
@@ -342,8 +342,8 @@
         var pageSize = 15;
         var total = 0;
 
-        function renderOrderPage(pageReslut) {
-            var orderInfoList = pageReslut.orderInfoList;
+        function renderOrderPage(pageResult) {
+            var orderInfoList = pageResult.orderInfoList;
             $("#orderTable", self.parent.frames["mainFrame"].document).empty();
             for (var i = 0; i < orderInfoList.length; i++) {
                 var order = orderInfoList[i];
@@ -399,11 +399,11 @@
             console.log("getOrderPage");
             currentPage = thisPage;
             preAndNextPageBind();
-            getOrderPageData(thisPage, pageSize, function(pageReslut) {
+            getOrderPageData(thisPage, pageSize, function(pageResult) {
                 $("#currentPage", self.parent.frames["mainFrame"].document).html(thisPage);
-                total = pageReslut.orderTotal;
+                total = pageResult.orderTotal;
                 $("#total", self.parent.frames["mainFrame"].document).html("(进行中 " + total + "单)");
-                renderOrderPage(pageReslut);
+                renderOrderPage(pageResult);
             });
         }
 
@@ -414,25 +414,36 @@
         }
         //endregion
 
-        //分页获取jd订单数据
-        function getOrderPageData(page, pageSize, pageReslutHandler) {
+        //分页获取tb订单数据
+		//WAIT_BUYER_PAY：等待买家付款
+		//WAIT_SELLER_SEND_GOODS：等待卖家发货
+		//SELLER_CONSIGNED_PART：卖家部分发货
+		//WAIT_BUYER_CONFIRM_GOODS：等待买家确认收货
+		//TRADE_BUYER_SIGNED：买家已签收（货到付款专用）
+		//TRADE_FINISHED：交易成功
+		//TRADE_CLOSED：交易关闭
+		//TRADE_CLOSED_BY_TAOBAO：交易被淘宝关闭
+		//TRADE_NO_CREATE_PAY：没有创建外部交易（支付宝交易）
+		//WAIT_PRE_AUTH_CONFIRM：余额宝0元购合约中
+		//PAY_PENDING：外卡支付付款确认中
+		//ALL_WAIT_PAY：所有买家未付款的交易（包含：WAIT_BUYER_PAY、TRADE_NO_CREATE_PAY）
+		//ALL_CLOSED：所有关闭的交易（包含：TRADE_CLOSED、TRADE_CLOSED_BY_TAOBAO）
+		//PAID_FORBID_CONSIGN，该状态代表订单已付款但是处于禁止发货状态。
+        function getOrderPageData(page, pageSize, pageResultHandler) {
             console.log("getOrderPageData");
-            var url = "http://114.67.70.80:8081/zboss/data/getOrder";
+            var url = "http://114.67.70.80:8080/zboss/data/getOrder";
             var data = {
                 "page": page,
-                "size": size,
+                "size": pageSize,
                 "orderState": "WAIT_SELLER_SEND_GOODS,SELLER_CONSIGNED_PART",
-                "optionalFields": "tid,created,pay_time,total_fee,buyer_nick,modified,receiver_name,receiver_mobile,receiver_phone,receiver_state,receiver_city,receiver_district,receiver_address,status,trade_from,num,sku_id,sku_properties_name,num_iid,price"
-            }
+				"optionalFields": "orders,tid,created,pay_time,total_fee,buyer_nick,modified,receiver_name,receiver_mobile,receiver_phone,receiver_state,receiver_city,receiver_district,receiver_address,status,trade_from,num,sku_id,sku_properties_name,num_iid,price"            }
             $.ajax({
                 url: url,
                 type: "post", //使用post方法
                 data: data,
                 success: function(data) {
-                    var pageReslut = data.message;
-                    console.log("getOrderPageData success，本页数据条数：" + pageReslut.length);
-                    //var orderInfoList = pageReslut.orderInfoList;
-                    pageReslutHandler(pageReslut);
+                    console.log("getOrderPageData success，本页数据条数：" + data.orderInfoList.length);
+                    pageResultHandler(data);
                 }
             })
         }
@@ -441,14 +452,14 @@
             var pageIndex = 1;
             var pageSize = 50;
             var orderlist = [];
-            getOrderPageData(1, 1, function(pageReslut) {
-                var total = pageReslut.length;
+            getOrderPageData(1, 1, function(pageResult) {
+                var total = pageResult.count;
                 console.log("getOrderList 探测到总数：" + total + ",分批数" + (1 + parseInt(total / pageSize)));
                 for (var i = 1; i < parseInt(total / pageSize) + 2; i++) {
                     console.log("getOrderList 抓取批次：" + i + "抓取size：" + pageSize);
-                    getOrderPageData(i, pageSize, function(pageReslut) {
-                        orderlist = orderlist.concat(pageReslut);
-                        console.log("getOrderList 抓到数据条数：" + pageReslut.length + "目前总数：" + orderlist.length);
+                    getOrderPageData(i, pageSize, function(pageResult) {
+                        orderlist = orderlist.concat(pageResult.orderInfoList);
+                        console.log("getOrderList 抓到数据条数：" + pageResult.length + "目前总数：" + orderlist.length);
                         if (orderlist.length == total) {
                             orderListHandler(orderlist);
                         }
@@ -810,7 +821,7 @@
             }
             //var url = 'https://api.jd.com/routerjson?v=2.0&method=jingdong.etms.waybillcode.get&app_key='+shopConfig.app_key+"&access_token="+shopConfig.access_token
             //   +'&360buy_param_json={"preNum":"1","customerCode":"'+customerCode+'","orderType":"0"}';
-            var url = "http://114.67.70.80:8081/zboss/data/getEtmsWaybillCode";
+            var url = "http://114.67.70.80:8080/zboss/data/getEtmsWaybillCode";
             var list = [];
             $.ajax({
                 url: url,
@@ -869,7 +880,7 @@
             //     +deliverInfoCode+'","salePlat":"'+salePlat+'","customerCode":"'+customerCode+'","orderId":"'+orderId+'","thrOrderId":"","selfPrintWayBill":"","pickMethod":"","packageRequired":"","senderName":"'
             //     +senderName+'","senderAddress":"'+senderAddress+'","senderTel":"'+senderTel+'","senderMobile":"","senderPostcode":"","receiveName":"'+receiveName+'","receiveAddress":"'+receiveAddress+'","province":"","city":"","county":"","town":"","provinceId":"","cityId":"","countyId":"","townId":"","siteType":"","siteId":"","siteName":"","receiveTel":"'
             //     +receiveTel+'","receiveMobile":"","postcode":"","packageCount":"'+packageCount+'","weight":"1","vloumLong":"","vloumWidth":"","vloumHeight":"","vloumn":"1","description":"","collectionValue":"","collectionMoney":"","guaranteeValue":"","guaranteeValueAmount":"","signReturn":"","aging":"","transType":"","remark":"","goodsType":"","orderType":"","shopCode":"","orderSendTime":"","warehouseCode":"","areaProvId":"","areaCityId":"","shipmentStartTime":"","shipmentEndTime":"","idNumber":"","addedService":"","extendField1":"","extendField2":"","extendField3":"","extendField4":"","extendField5":"","senderCompany":"","receiveCompany":""}';
-            var url = "http://114.67.70.80:8081/zboss/data/sendEtmsWaybill";
+            var url = "http://114.67.70.80:8080/zboss/data/sendEtmsWaybill";
             $.ajax({
                 url: url,
                 type: 'post',
@@ -953,7 +964,7 @@
             //var url = 'https://api.jd.com/routerjson?v=2.0&method=360buy.order.sop.outstorage&app_key='+shopConfig.app_key+"&access_token="+shopConfig.access_token
             //   +'&360buy_param_json={"logistics_id":"'+deliverInfoLogisticsId+'","waybill":"'+deliverInfoCode+'","order_id":"'+orderId+'","trade_no":""}';
 
-            var url = "http://114.67.70.80:8081/zboss/data/orderSopOutstorages";
+            var url = "http://114.67.70.80:8080/zboss/data/orderSopOutstorages";
             $.ajax({
                 url: url,
                 type: 'post',
