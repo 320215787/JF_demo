@@ -475,7 +475,7 @@
                 "page": page,
                 "size": pageSize,
                 "orderState": "WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,TRADE_CANCELED,LOCKED",
-                "optionalFields": "pin,order_total_price,order_state,payment_confirm_time,order_start_time,consignee_info,vat_invoice_info,item_info_list,invoice_info,order_remark,vender_remark,order_source,modified"
+                "optionalFields": "pin,orderTotalPrice,orderState,paymentConfirmTime,orderStartTime,consigneeInfo,invoiceEasyInfo,vatInfo,itemInfoList,invoiceInfo,orderRemark,venderRemark,orderSource,modified"
             }
 			console.log(data)
             $.ajax({
@@ -659,8 +659,8 @@
                 orderEntity[templateDefinition.orderTemplateFieldKeys.mobile] = order.consigneeInfo.mobile;
 
                 orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceInfo] = order.invoiceInfo;
-                //orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceEasyInfo.invoiceTitle;
-                //orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceEasyInfo.invoiceCode;
+                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceEasyInfo.invoiceTitle;
+                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceEasyInfo.invoiceCode;
 
                 orderEntity[templateDefinition.orderTemplateFieldKeys.venderRemark] = order.venderRemark;
                 orderEntity[templateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
@@ -768,7 +768,7 @@
                 console.log("downloadOrderList");
                 getOrderList(function(orderList) {
                     console.log("getOrderList抓取京东全部未完成订单完毕,size:" + orderList.length);
-
+					return false;
                     //JD订单列表转化为JF模板格式
                     var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
                         return templateDefinition.convertToOrderTemplateEntity(order);
