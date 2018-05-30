@@ -310,7 +310,7 @@
         console.log("load");
         //region jd全局配置
         var shopConfigs = [{
-			id: "C JF旗舰",
+			id: "A JF旗舰",
             appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
             accessToken: "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
             shopName: "9F官方旗舰店"
@@ -321,12 +321,12 @@
             accessToken: "4d50f340-8490-4745-8ed6-b71f5714f5d8",
             shopName: "考拉家族旗舰店"
         }, {
-            id: "A 宜宇汽车",
+            id: "C 宜宇汽车",
             appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
             accessToken: "bf13ed28-e230-4444-b3c4-983aae14d815",
             shopName: "宜宇车品专营店"
         }, {
-            id: "C 九孚旗舰店",
+            id: "D 九孚旗舰店",
             appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
             accessToken: "e55597f5-e90b-4106-9c3d-4ccce1be7b39",
             shopName: "九孚旗舰店"
@@ -471,13 +471,11 @@
             var url = "http://114.67.70.80:8081/zboss/data/getOrderFromJD";
             var data = {
 				"accessToken":shopConfig.accessToken,
-				"appSecret":shopConfig.appSecret,
                 "page": page,
                 "size": pageSize,
                 "orderState": "WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,TRADE_CANCELED,LOCKED",
                 "optionalFields": "pin,orderTotalPrice,orderState,paymentConfirmTime,orderStartTime,consigneeInfo,invoiceEasyInfo,invoiceTitle,invoiceCode,vatInfo,itemInfoList,invoiceInfo,orderRemark,venderRemark,orderSource,modified"
             }
-			console.log(data)
             $.ajax({
                 url: url,
                 type: "post", //使用post方法
@@ -499,7 +497,7 @@
             var pageIndex = 1;
             var pageSize = 50;
             var orderlist = [];
-            getOrderPageData(1, 10, function(pageReslut) {
+            getOrderPageData(1, 1, function(pageReslut) {
                 var total = pageReslut.orderTotal;
                 console.log("getOrderList 探测到总数：" + total + ",分批数" + (1 + parseInt(total / pageSize)));
                 for (var i = 1; i < parseInt(total / pageSize) + 2; i++) {
@@ -884,7 +882,6 @@
 				dataType: 'json',
                 data: {
 					"accessToken":shopConfig.accessToken,
-					"appSecret":shopConfig.appSecret,
                     "preNum": "1",
                     "customerCode": customerCode,
                     "orderType": "0"
@@ -944,7 +941,6 @@
                 type: 'post',
                 data: {
 					"accessToken":shopConfig.accessToken,
-					"appSecret":shopConfig.appSecret,
                     "deliveryId": deliverInfoCode,
                     "salePlat": salePlat,
                     "customerCode": customerCode,
@@ -1030,7 +1026,6 @@
                 type: 'post',
                 data: {
 					"accessToken":shopConfig.accessToken,
-					"appSecret":shopConfig.appSecret,
                     "logisticsId": deliverInfoLogisticsId,
                     "waybill": deliverInfoCode,
                     "orderId": orderId,
