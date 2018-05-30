@@ -410,9 +410,9 @@
 				});
 			}
 
-			function importOrderListBtnBind() {
+			function importTBOrderListBtnBind() {
 				$("#shopTbImportBtn", self.parent.frames["mainFrame"].document).bind("click", function() {
-					importOrderList();
+					importTBOrderList();
 				})
 			}
 			//endregion
@@ -709,7 +709,7 @@
 			}
 			var shopIndex = 0;
 
-			function importOrderList() {
+			function importTBOrderList() {
 				console.log("抓取數據")
 				if(shopIndex >= shopConfigs.length) {
 					shopIndex = 0;
@@ -721,6 +721,7 @@
 				console.log("downloadOrderList");
 				getOrderList(function(orderList) {
 					console.log("getOrderList抓取淘宝全部未完成订单完毕,size:" + orderList.length);
+					return false;
 					//TB订单列表转化为JF模板格式
 					var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
 						return templateDefinition.convertToOrderTemplateEntity(order);
@@ -795,7 +796,7 @@
 									message: "更新订单数：" + orderEntityListConvertFromJDOrderList.length + " ，其中已交易完成订单数：" + finishedStatusOrderIds.length,
 									position: 'bottomRight'
 								});
-								importOrderList();
+								importTBOrderList();
 							}
 						});
 					});
@@ -998,8 +999,8 @@
 				apiCallerInit();
 				console.log("reday exc loadShop");
 				loadShop(shopConfig);
-				console.log("reday exc importOrderListBtnBind");
-				importOrderListBtnBind();
+				console.log("reday exc importTBOrderListBtnBind");
+				importTBOrderListBtnBind();
 
 				iziToast.success({
 					title: '订单同步模块就绪！',
