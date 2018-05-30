@@ -448,6 +448,7 @@
 					type: "post", //使用post方法
 					data: data,
 					success: function(data) {
+						console.log(data)
 						console.log("getOrderPageData success，本页数据条数：" + data.orderInfoList.length);
 						pageResultHandler(data);
 					}
