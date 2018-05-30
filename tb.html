@@ -316,28 +316,28 @@
 		<script type="text/javascript">
 			console.log("load");
 			//region jd全局配置
-			var shopConfigs = [{
+			var tbShopConfigs = [{
 				id: "A 九孚五金专营店",
 				app_key: "8F3A3F4A4C2C8CC7FC2B351B2F4F785E",
 				access_token: "6202416bd4725c8577f5d648ZZ7644e68d4322530bf2f693171758181",
 				shopName: "九孚五金专营店"
 			}];
 
-			var shopConfig = shopConfigs[0];
+			var tbShopConfig = tbShopConfigs[0];
 
 			// region 数据展示页面
-			function preAndNextPageBind() {
+			function preAndNextTBPageBind() {
 				$("#prePage", self.parent.frames["mainFrame"].document).unbind();
 				$("#prePage", self.parent.frames["mainFrame"].document).bind("click", function() {
 					var prePage = currentPage - 1 < 1 ? 1 : currentPage - 1;
 					console.log("prePage" + prePage);
-					getOrderPage(prePage, pageSize);
+					getTBOrderPage(prePage, pageSize);
 				})
 				$("#nextPage", self.parent.frames["mainFrame"].document).unbind();
 				$("#nextPage", self.parent.frames["mainFrame"].document).bind("click", function() {
 					var nextPage = currentPage + 1 > parseInt(total / pageSize) + 1 ? parseInt(total / pageSize) + 1 : currentPage + 1;
 					console.log("nextPage" + nextPage);
-					getOrderPage(nextPage, pageSize);
+					getTBOrderPage(nextPage, pageSize);
 				})
 			}
 
@@ -345,7 +345,7 @@
 			var pageSize = 15;
 			var total = 0;
 
-			function renderOrderPage(pageResult) {
+			function renderTBOrderPage(pageResult) {
 				var orderInfoList = pageResult.orderInfoList;
 				$("#orderTable", self.parent.frames["mainFrame"].document).empty();
 				for(var i = 0; i < orderInfoList.length; i++) {
@@ -398,15 +398,15 @@
 				}
 			}
 
-			function getOrderPage(thisPage, pageSize) {
-				console.log("getOrderPage");
+			function getTBOrderPage(thisPage, pageSize) {
+				console.log("getTBOrderPage");
 				currentPage = thisPage;
-				preAndNextPageBind();
-				getOrderPageData(thisPage, pageSize, function(pageResult) {
+				preAndNextTBPageBind();
+				getTBOrderPageData(thisPage, pageSize, function(pageResult) {
 					$("#currentPage", self.parent.frames["mainFrame"].document).html(thisPage);
 					total = pageResult.orderTotal;
 					$("#total", self.parent.frames["mainFrame"].document).html("(进行中 " + total + "单)");
-					renderOrderPage(pageResult);
+					renderTBOrderPage(pageResult);
 				});
 			}
 
@@ -433,11 +433,11 @@
 			//PAID_FORBID_CONSIGN，该状态代表订单已付款但是处于禁止发货状态。
 
 			//分页获取tb订单数据
-			function getOrderPageData(page, pageSize, pageResultHandler) {
-				console.log("getOrderPageData");
+			function getTBOrderPageData(page, pageSize, pageResultHandler) {
+				console.log("getTBOrderPageData");
 				var url = "http://114.67.70.80:8080/zboss/data/getOrder";
 				var data = {
-					"accessToken":shopConfig.access_token,
+					"accessToken":tbShopConfig.access_token,
 					"page": page,
 					"size": pageSize,
 					"orderState": "WAIT_SELLER_SEND_GOODS,WAIT_BUYER_CONFIRM_GOODS,TRADE_BUYER_SIGNED,SELLER_CONSIGNED_PART,TRADE_CLOSED,TRADE_FINISHED",
@@ -449,24 +449,24 @@
 					data: data,
 					success: function(data) {
 						console.log(data)
-						console.log("getOrderPageData success，本页数据条数：" + data.orderInfoList.length);
+						console.log("getTBOrderPageData success，本页数据条数：" + data.orderInfoList.length);
 						pageResultHandler(data);
 					}
 				})
 			}
 			//翻页获取全部tb订单数据
-			function getOrderList(orderListHandler) {
+			function getTBOrderList(orderListHandler) {
 				var pageIndex = 1;
 				var pageSize = 50;
 				var orderlist = [];
-				getOrderPageData(1, 1, function(pageResult) {
+				getTBOrderPageData(1, 1, function(pageResult) {
 					var total = pageResult.count;
-					console.log("getOrderList 探测到总数：" + total + ",分批数" + (1 + parseInt(total / pageSize)));
+					console.log("getTBOrderList 探测到总数：" + total + ",分批数" + (1 + parseInt(total / pageSize)));
 					for(var i = 1; i < parseInt(total / pageSize) + 2; i++) {
-						console.log("getOrderList 抓取批次：" + i + "抓取size：" + pageSize);
-						getOrderPageData(i, pageSize, function(pageResult) {
+						console.log("getTBOrderList 抓取批次：" + i + "抓取size：" + pageSize);
+						getTBOrderPageData(i, pageSize, function(pageResult) {
 							orderlist = orderlist.concat(pageResult.orderInfoList);
-							console.log("getOrderList 抓到数据条数：" + pageResult.length + "目前总数：" + orderlist.length);
+							console.log("getTBOrderList 抓到数据条数：" + pageResult.length + "目前总数：" + orderlist.length);
 							if(orderlist.length == total) {
 								orderListHandler(orderlist);
 							}
@@ -560,7 +560,7 @@
 					orderEntity[templateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
 					orderEntity[templateDefinition.orderTemplateFieldKeys.orderState] = order.orderState;
 					orderEntity[templateDefinition.orderTemplateFieldKeys.orderSource] = order.orderSource;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.shopName] = shopConfig.shopName;
+					orderEntity[templateDefinition.orderTemplateFieldKeys.shopName] = tbShopConfig.shopName;
 					return orderEntity;
 				},
 				appendDeliveryInfoToOrderTemplateEntity: function(orderEntity, orderEntityListWithDeliverInfo) {
@@ -625,7 +625,7 @@
 					orderEntity[templateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
 					orderEntity[templateDefinition.orderTemplateFieldKeys.orderState] = order.orderState;
 					orderEntity[templateDefinition.orderTemplateFieldKeys.orderSource] = order.orderSource;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.shopName] = shopConfig.shopName;
+					orderEntity[templateDefinition.orderTemplateFieldKeys.shopName] = tbShopConfig.shopName;
 					var index = 0;
 					orderEntity.itemInfoList = order.itemInfoList.map(function(itemInfo) {
 						var orderItemEntity = {};
@@ -656,8 +656,8 @@
 			}
 
 			//查询JF订单 返回id等+entity
-			function getOrderListFromTemplateByFilter(filter, orderListHandler) {
-				console.log("getOrderListFromTemplateByFilter");
+			function getTBOrderListFromTemplateByFilter(filter, orderListHandler) {
+				console.log("getTBOrderListFromTemplateByFilter");
 				$.ajax({
 					url: baseUrl + "/api/" + templateDefinition.orderTemplateId, //接口：api/{模板ID}
 					type: "get",
@@ -668,7 +668,7 @@
 						pagesize: 300 //每页数量(可选)。默认值：表格视图默认版式的每页数量
 					},
 					success: function(result) {
-						console.log("getOrderListFromTemplateByFilter success" + result.data.length);
+						console.log("getTBOrderListFromTemplateByFilter success" + result.data.length);
 						var data = result.data;
 						var orderEntityList = data.map(function(jfTemplateDataElement) {
 							var orderEntity = jfTemplateDataElement.fields;
@@ -712,16 +712,16 @@
 
 			function importTBOrderList() {
 				console.log("抓取數據")
-				if(shopIndex >= shopConfigs.length) {
+				if(shopIndex >= tbShopConfigs.length) {
 					shopIndex = 0;
-					console.log('TB' + (shopConfigs.length) + ' 个门店订单数据同步成功！');
+					console.log('TB' + (tbShopConfigs.length) + ' 个门店订单数据同步成功！');
 					self.parent.frames["mainFrame"].location.reload(true);
 					return;
 				}
-				shopConfig = shopConfigs[shopIndex++];
+				tbShopConfig = tbShopConfigs[shopIndex++];
 				console.log("downloadOrderList");
-				getOrderList(function(orderList) {
-					console.log("getOrderList抓取淘宝全部未完成订单完毕,size:" + orderList.length);
+				getTBOrderList(function(orderList) {
+					console.log("getTBOrderList抓取淘宝全部未完成订单完毕,size:" + orderList.length);
 					return false;
 					//TB订单列表转化为JF模板格式
 					var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
@@ -736,9 +736,9 @@
 					});
 
 					// 标记已经完成的订单
-					getOrderListFromTemplateByFilter("NotFinished", function(orderEntityList) {
-						console.log("getOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
-						//console.log("orderEntityList（getOrderListFromTemplateByFilter）:"+JSON.stringify(orderEntityList));
+					getTBOrderListFromTemplateByFilter("NotFinished", function(orderEntityList) {
+						console.log("getTBOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
+						//console.log("orderEntityList（getTBOrderListFromTemplateByFilter）:"+JSON.stringify(orderEntityList));
 						var finishedStatusOrderIds = [];
 						orderEntityList.forEach(function(jfOrderEntity) {
 							var notInJdListOrder = orderEntityListConvertFromJDOrderList.myfind(function(jdOrderEntity) {
@@ -793,7 +793,7 @@
 							success: function(data) {
 								console.log("同步成功! " + JSON.stringify(data));
 								iziToast.success({
-									title: shopConfig.shopName + ' 订单同步成功！',
+									title: tbShopConfig.shopName + ' 订单同步成功！',
 									message: "更新订单数：" + orderEntityListConvertFromJDOrderList.length + " ，其中已交易完成订单数：" + finishedStatusOrderIds.length,
 									position: 'bottomRight'
 								});
@@ -988,7 +988,7 @@
 					if(errorRes.code == 19) {
 						iziToast.error({
 							title: '授权到期!',
-							message: "需重新获取JD店铺授权！" + shopConfig.shopName
+							message: "需重新获取JD店铺授权！" + tbShopConfig.shopName
 						});
 						console.log("https://oauth.jd.com/oauth/authorize?response_type=code&client_id=8F3A3F4A4C2C8CC7FC2B351B2F4F785E&redirect_uri=urn:ietf:wg:oauth:2.0:oob");
 					}
@@ -999,7 +999,7 @@
 				console.log("reday exc apiCallerInit");
 				apiCallerInit();
 				console.log("reday exc loadShop");
-				loadShop(shopConfig);
+				loadShop(tbShopConfig);
 				console.log("reday exc importTBOrderListBtnBind");
 				importTBOrderListBtnBind();
 
