@@ -723,17 +723,17 @@
 					}
 				});
 			}
-			var shopIndex = 0;
+			var tbShopIndex = 0;
 
 			function importTBOrderList() {
 				console.log("抓取數據")
-				if(shopIndex >= tbShopConfigs.length) {
-					shopIndex = 0;
+				if(tbShopIndex >= tbShopConfigs.length) {
+					tbShopIndex = 0;
 					console.log('TB' + (tbShopConfigs.length) + ' 个门店订单数据同步成功！');
 					self.parent.frames["mainFrame"].location.reload(true);
 					return;
 				}
-				tbShopConfig = tbShopConfigs[shopIndex++];
+				tbShopConfig = tbShopConfigs[tbShopIndex++];
 				console.log("downloadOrderList");
 				getTBOrderList(function(orderList) {
 					console.log("getTBOrderList抓取淘宝全部未完成订单完毕,size:" + orderList.length);

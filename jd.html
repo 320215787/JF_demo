@@ -746,11 +746,11 @@
                 }
             });
         }
-        var shopIndex = 0;
+        var jdShopIndex = 0;
 
         function importJDOrderList() {
-            if (shopIndex >= shopConfigs.length) {
-                shopIndex = 0;
+            if (jdShopIndex >= shopConfigs.length) {
+                jdShopIndex = 0;
                 /*iziToast.success({
                     title: 'JD '+(shopConfigs.length)+' 个门店订单数据同步成功！',
                     message: "",
@@ -760,7 +760,7 @@
                 self.parent.frames["mainFrame"].location.reload(true);
                 return;
             }
-            shopConfig = shopConfigs[shopIndex++];
+            shopConfig = shopConfigs[jdShopIndex++];
            // loginShop(shopConfig, function(name) {
                 console.log("downloadOrderList");
                 getOrderList(function(orderList) {
