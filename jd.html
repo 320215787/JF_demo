@@ -20,7 +20,7 @@
     <h4>
         京东订单数据同步
         <span><a id="shopName"></a>
-        <button id="shop1ImportBtn">同步</button>
+        <button id="shopJDImportBtn">同步</button>
         <a id="total"></a></span>
 
     </h4>
@@ -456,10 +456,10 @@
             });
         }
 
-        function importOrderListBtnBind() {
-            $("#shop1ImportBtn", self.parent.frames["mainFrame"].document).bind("click", function() {
+        function importJDOrderListBtnBind() {
+            $("#shopJDImportBtn", self.parent.frames["mainFrame"].document).bind("click", function() {
 				console.log("同步数据")
-                importOrderList();
+                importJDOrderList();
             })
         }
         //endregion
@@ -749,7 +749,7 @@
         }
         var shopIndex = 0;
 
-        function importOrderList() {
+        function importJDOrderList() {
             if (shopIndex >= shopConfigs.length) {
                 shopIndex = 0;
                 /*iziToast.success({
@@ -842,7 +842,7 @@
                                     message: "更新订单数：" + orderEntityListConvertFromJDOrderList.length + " ，其中已交易完成订单数：" + finishedStatusOrderIds.length,
                                     position: 'bottomRight'
                                 });
-                                importOrderList();
+                                importJDOrderList();
                             }
                         });
                     });
@@ -1062,8 +1062,8 @@
             apiCallerInit();
             console.log("reday exc loadShop");
             loadShop(shopConfig);
-            console.log("reday exc importOrderListBtnBind");
-            importOrderListBtnBind();
+            console.log("reday exc importJDOrderListBtnBind");
+            importJDOrderListBtnBind();
 
             iziToast.success({
                 title: '订单同步模块就绪！',
