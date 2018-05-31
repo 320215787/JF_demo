@@ -737,7 +737,6 @@
 				console.log("downloadOrderList");
 				getTBOrderList(function(orderList) {
 					console.log("getTBOrderList抓取淘宝全部未完成订单完毕,size:" + orderList.length);
-					return false;
 					//TB订单列表转化为JF模板格式
 					var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
 						return templateDefinition.convertToOrderTemplateEntity(order);
