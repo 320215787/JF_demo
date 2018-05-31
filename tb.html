@@ -825,60 +825,14 @@
 			var senderAddress = "陶双杰 13122228216 上海松江区九亭镇同利路551号1栋202";
 			var salePlat = "0010001";
 			var senderTel = "13122779958";
-			/**
-			 *  获取物流运单号
-			 * @param deliverInfoLogisticsId 物流公司编号
-			 * @param deliverInfoCodeHandler 物流公司分配的运单号处理函数
-			 */
-			function getDeliverInfoCode(orderId, deliverInfoLogisticsId) {
-				//https://api.jd.com/routerjson?v=2.0&method=jingdong.etms.waybillcode.get&app_key=8F3A3F4A4C2C8CC7FC2B351B2F4F785E&access_token=5d2a449c-6de0-40c3-9649-df0c07b6aa64&360buy_param_json={"preNum":"1","customerCode":"021K35939","orderType":"0"}&timestamp=2018-04-21 11:40:03&sign=ED35D1864B807C55752F807B1BE6D61E
-				if(deliverInfoLogisticsId != 2087) {
-					iziToast.error({
-						title: '只有京东快递可以获取运单号!',
-						message: "",
-						position: 'bottomRight'
-					});
-					return;
-				}
-				var url = "http://114.67.70.80:8080/zboss/data/getEtmsWaybillCode";
-				var list = [];
-				$.ajax({
-					url: url,
-					type: "post", //使用post方法
-					data: {
-						"preNum": "1",
-						"customerCode": customerCode,
-						"orderType": "0"
-					},
-					success: function(data) {
-						console.log("0");
-						console.log(data);
-						var deliverCode = JSON.parse(data).jingdong_etms_waybillcode_get_responce.resultInfo.deliveryIdList[0];
-						console.log("分配的运单号是：" + deliverCode);
-						var row = {};
-						row[templateDefinition.orderTemplateFieldKeys.deliverInfoCode] = deliverCode;
-						row.key = templateDefinition.orderTemplateFieldKeys.orderId;
-						row.value = orderId;
-						list.push(row);
-						$.ajax({
-							url: baseUrl + "/api/" + templateDefinition.orderTemplateId, //接口：api/{模板ID}
-							type: "put", //使用put方法
-							headers: getHeaders(),
-							data: JSON.stringify(list),
-							success: function() {
-								//location.reload(true);
-								iziToast.success({
-									title: '获取运单号成功!',
-									message: deliverCode,
-									position: 'bottomRight'
-								});
-								self.parent.frames["mainFrame"].location.reload(true);
-							}
-						});
-					}
-				})
+		
+			function tbOutStrageOnLine(orderId,companyCode){
+				console.log(orderId+"---"+companyCode);
 			}
-
+			function tbOutStrageOffLine(orderId,outSid,companyCode){
+				console.log(orderId+"---"+outSid+"---"+companyCode);
+			}
+		
 			function outStrage(orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel) {
 				if(deliverInfoLogisticsId == 2087) {
 					//jd快递接单
