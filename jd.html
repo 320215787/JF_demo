@@ -628,8 +628,8 @@
         }
 
         //查询JF订单 返回id等+entity
-        function getOrderListFromTemplateByFilter(filter, orderListHandler) {
-            console.log("getOrderListFromTemplateByFilter");
+        function getJDOrderListFromTemplateByFilter(filter, orderListHandler) {
+            console.log("getJDOrderListFromTemplateByFilter");
             $.ajax({
                 url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId, //接口：api/{模板ID}
                 type: "get",
@@ -640,7 +640,7 @@
                     pagesize: 300 //每页数量(可选)。默认值：表格视图默认版式的每页数量
                 },
                 success: function(result) {
-                    console.log("getOrderListFromTemplateByFilter success" + result.data.length);
+                    console.log("getJDOrderListFromTemplateByFilter success" + result.data.length);
                     var data = result.data;
                     var orderEntityList = data.map(function(jfTemplateDataElement) {
                         var orderEntity = jfTemplateDataElement.fields;
@@ -712,11 +712,11 @@
                     });
 					
                     // 标记已经完成的订单
-                    getOrderListFromTemplateByFilter("NotFinished", function(orderEntityList) {
+                    getJDOrderListFromTemplateByFilter("NotFinished", function(orderEntityList) {
 						console.log(orderEntityList);
 						
-                        console.log("getOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
-                        //console.log("orderEntityList（getOrderListFromTemplateByFilter）:"+JSON.stringify(orderEntityList));
+                        console.log("getJDOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
+                        //console.log("orderEntityList（getJDOrderListFromTemplateByFilter）:"+JSON.stringify(orderEntityList));
                         var finishedStatusOrderIds = [];
                         orderEntityList.forEach(function(jfOrderEntity) {
                             var notInJdListOrder = orderEntityListConvertFromJDOrderList.myfind(function(jdOrderEntity) {
@@ -754,6 +754,7 @@
                                 });
                             }
                         })
+						
                         console.log("需更新订单明细数：" + orderItemList.length);
                         //console.log(JSON.stringify(orderItemList));
                         //批量保存jd订单明细（新增，按订单明细编号选择性更新字段）

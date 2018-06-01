@@ -695,14 +695,14 @@
 								return equals(jfOrderEntity[templateDefinition.orderTemplateFieldKeys.orderId], jdOrderEntity[templateDefinition.orderTemplateFieldKeys.orderId]);
 							})
 							if(null == notInJdListOrder) {
-								//jfOrderEntity[templateDefinition.orderTemplateFieldKeys.orderState] = "FINISHED_L";
+								//jfOrderEntity[templateDefinition.orderTemplateFieldKeys.orderState] = "TRADE_FINISHED";
 								finishedStatusOrderIds.push(jfOrderEntity[templateDefinition.orderTemplateFieldKeys.orderId]);
 							}
 						});
 						finishedStatusOrderIds.forEach(function(orderId) {
 							var finishedOrder = {};
 							finishedOrder[templateDefinition.orderTemplateFieldKeys.orderId] = orderId;
-							finishedOrder[templateDefinition.orderTemplateFieldKeys.orderState] = "FINISHED_L";
+							finishedOrder[templateDefinition.orderTemplateFieldKeys.orderState] = "TRADE_FINISHED";
 
 							finishedOrder.key = templateDefinition.orderTemplateFieldKeys.orderId;
 							finishedOrder.value = orderId;
@@ -712,7 +712,7 @@
 						//console.log(JSON.stringify(orderEntityListConvertFromJDOrderList))
 						var orderItemList = [];
 						orderEntityListConvertFromJDOrderList.forEach(function(orderEntity) {
-							if(orderEntity[templateDefinition.orderTemplateFieldKeys.orderState] != "FINISHED_L") {
+							if(orderEntity[templateDefinition.orderTemplateFieldKeys.orderState] != "TRADE_FINISHED") {
 								orderEntity.itemInfoList.forEach(function(itemEntity) {
 									//itemEntity[templateDefinition.orderDetailTemplateFieldKeys.orderItemId]=itemEntity[templateDefinition.orderDetailTemplateFieldKeys.orderItemId];
 									itemEntity.key = templateDefinition.orderDetailTemplateFieldKeys.orderItemId;
