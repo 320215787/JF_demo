@@ -526,71 +526,7 @@
 					});
 				});
 			}
-			var templateDefinitionDev = {
-				orderTemplateId: 109, //在线订单模板表id
-				orderTemplateFieldKeys: {
-					"orderId": "1269", //订单编号
-					"orderStartTime": "1270", //下单时间
-					"paymentConfirmTime": "1271", //付款时间
-					"shopName": "1272", //下单平台
-					"orderTotalPrice": "1273", //订单总金额
-					"pin": "1274", //买家id
-					"fullname": "1275", //收货人
-					"fullAddress": "1276", //收货地址
-					"telephone": "1277", //手机
-					"mobile": "1278", //固定电话
-					"invoiceInfo": "1279", //开票信息
-					"invoiceTitle": "1280", //发票抬头
-					"invoiceCode": "1281", //税号
-					"venderRemark": "1282", //买家留言
-					"orderRemark": "1283", //商家留言
-					"orderState": "1284", //订单状态
-					"orderSource": "1293", //订单来源
-					"modified": "1303", //京东最后修改时间
-					"deliverInfoCode": "1296", //快递单号
-					"1295": "物流公司",
-					"1296": "快递单号",
-					"1297": "快递单号变更",
-					"1299": "包裹数"
-				},
-				convertToOrderTemplateEntity: function(order) {
-					var orderEntity = new Object();
-					orderEntity[templateDefinition.orderTemplateFieldKeys.orderId] = order.orderId;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.orderStartTime] = order.orderStartTime;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.paymentConfirmTime] = order.paymentConfirmTime;
-
-					orderEntity[templateDefinition.orderTemplateFieldKeys.orderTotalPrice] = order.orderTotalPrice;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.pin] = order.pin;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.modified] = order.modified;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.fullname] = order.consigneeInfo.fullname;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.fullAddress] = order.consigneeInfo.fullAddress;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.telephone] = order.consigneeInfo.telephone;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.mobile] = order.consigneeInfo.mobile;
-
-					orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceInfo] = order.invoiceInfo;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceEasyInfo.invoiceTitle;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceEasyInfo.invoiceCode;
-
-					orderEntity[templateDefinition.orderTemplateFieldKeys.venderRemark] = order.venderRemark;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.orderState] = order.orderState;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.orderSource] = order.orderSource;
-					orderEntity[templateDefinition.orderTemplateFieldKeys.shopName] = tbShopConfig.shopName;
-					return orderEntity;
-				},
-				appendDeliveryInfoToOrderTemplateEntity: function(orderEntity, orderEntityListWithDeliverInfo) {
-					var orderEntityWithDeliverInfo = orderEntityListWithDeliverInfo.myfind(function(e) {
-						return e[1269] = orderEntity[1269];
-					});
-					orderEntity[1295] = orderEntityWithDeliverInfo[1295];
-					orderEntity[1296] = orderEntityWithDeliverInfo[1296];
-					orderEntity[1297] = orderEntityWithDeliverInfo[1297];
-					orderEntity[1299] = orderEntityWithDeliverInfo[1299];
-					return orderEntity;
-				}
-
-			}
-
+			
 			var templateDefinition = {
 				orderTemplateId: 97, //在线订单模板表id
 				orderTemplateFieldKeys: {
@@ -618,7 +554,7 @@
 					"1112": "快递单号变更",
 					"1113": "包裹数"
 				},
-				convertToOrderTemplateEntity: function(order) {
+				tbConvertToOrderTemplateEntity: function(order) {
 					var orderEntity = new Object();
 					orderEntity[templateDefinition.orderTemplateFieldKeys.orderId] = order.orderId;
 					orderEntity[templateDefinition.orderTemplateFieldKeys.orderStartTime] = order.orderStartTime;
@@ -739,7 +675,7 @@
 					console.log("getTBOrderList抓取淘宝全部未完成订单完毕,size:" + orderList.length);
 					//TB订单列表转化为JF模板格式
 					var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
-						return templateDefinition.convertToOrderTemplateEntity(order);
+						return templateDefinition.tbConvertToOrderTemplateEntity(order);
 					});
 					//console.log("orderEntityListConvertFromJDOrderList:"+JSON.stringify(orderEntityListConvertFromJDOrderList));
 

@@ -312,7 +312,7 @@
         var shopConfigs = [{
 			id: "A JF旗舰",
             appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
-            accessToken: "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf66",
+            accessToken: "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
             shopName: "9F官方旗舰店"
         }
 		, {
@@ -550,72 +550,8 @@
                 });
             });
         }
-        var templateDefinitionDev = {
-            orderTemplateId: 109, //在线订单模板表id
-            orderTemplateFieldKeys: {
-                "orderId": "1269", //订单编号
-                "orderStartTime": "1270", //下单时间
-                "paymentConfirmTime": "1271", //付款时间
-                "shopName": "1272", //下单平台
-                "orderTotalPrice": "1273", //订单总金额
-                "pin": "1274", //买家id
-                "fullname": "1275", //收货人
-                "fullAddress": "1276", //收货地址
-                "telephone": "1277", //手机
-                "mobile": "1278", //固定电话
-                "invoiceInfo": "1279", //开票信息
-                "invoiceTitle": "1280", //发票抬头
-                "invoiceCode": "1281", //税号
-                "venderRemark": "1282", //买家留言
-                "orderRemark": "1283", //商家留言
-                "orderState": "1284", //订单状态
-                "orderSource": "1293", //订单来源
-                "modified": "1303", //京东最后修改时间
-                "deliverInfoCode": "1296", //快递单号
-                "1295": "物流公司",
-                "1296": "快递单号",
-                "1297": "快递单号变更",
-                "1299": "包裹数"
-            },
-            convertToOrderTemplateEntity: function(order) {
-                var orderEntity = new Object();
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderId] = order.orderId;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderStartTime] = order.orderStartTime;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.paymentConfirmTime] = order.paymentConfirmTime;
-
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderTotalPrice] = order.orderTotalPrice;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.pin] = order.pin;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.modified] = order.modified;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.fullname] = order.consigneeInfo.fullname;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.fullAddress] = order.consigneeInfo.fullAddress;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.telephone] = order.consigneeInfo.telephone;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.mobile] = order.consigneeInfo.mobile;
-
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceInfo] = order.invoiceInfo;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceEasyInfo.invoiceTitle;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceEasyInfo.invoiceCode;
-
-                orderEntity[templateDefinition.orderTemplateFieldKeys.venderRemark] = order.venderRemark;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderState] = order.orderState;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderSource] = order.orderSource;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.shopName] = shopConfig.shopName;
-                return orderEntity;
-            },
-            appendDeliveryInfoToOrderTemplateEntity: function(orderEntity, orderEntityListWithDeliverInfo) {
-                var orderEntityWithDeliverInfo = orderEntityListWithDeliverInfo.myfind(function(e) {
-                    return e[1269] = orderEntity[1269];
-                });
-                orderEntity[1295] = orderEntityWithDeliverInfo[1295];
-                orderEntity[1296] = orderEntityWithDeliverInfo[1296];
-                orderEntity[1297] = orderEntityWithDeliverInfo[1297];
-                orderEntity[1299] = orderEntityWithDeliverInfo[1299];
-                return orderEntity;
-            }
-
-        }
-
-        var templateDefinition = {
+        
+        var jdTemplateDefinition = {
             orderTemplateId: 97, //在线订单模板表id
             orderTemplateFieldKeys: {
                 "orderId": "1092", //订单编号
@@ -644,38 +580,38 @@
             },
             convertToOrderTemplateEntity: function(order) {
                 var orderEntity = new Object();
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderId] = order.orderId;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderStartTime] = order.orderStartTime;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.paymentConfirmTime] = order.paymentConfirmTime;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId] = order.orderId;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderStartTime] = order.orderStartTime;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.paymentConfirmTime] = order.paymentConfirmTime;
 
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderTotalPrice] = order.orderTotalPrice;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.pin] = order.pin;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.modified] = order.modified;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.fullname] = order.consigneeInfo.fullname;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.fullAddress] = order.consigneeInfo.fullAddress;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.telephone] = order.consigneeInfo.telephone;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.mobile] = order.consigneeInfo.mobile;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderTotalPrice] = order.orderTotalPrice;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.pin] = order.pin;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.modified] = order.modified;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.fullname] = order.consigneeInfo.fullname;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.fullAddress] = order.consigneeInfo.fullAddress;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.telephone] = order.consigneeInfo.telephone;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.mobile] = order.consigneeInfo.mobile;
 
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceInfo] = order.invoiceInfo;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceTitle;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceCode;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.invoiceInfo] = order.invoiceInfo;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceTitle;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceCode;
 
-                orderEntity[templateDefinition.orderTemplateFieldKeys.venderRemark] = order.venderRemark;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderState] = order.orderState;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.orderSource] = order.orderSource;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.shopName] = shopConfig.shopName;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.venderRemark] = order.venderRemark;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderState] = order.orderState;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderSource] = order.orderSource;
+                orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.shopName] = shopConfig.shopName;
                 var index = 0;
                 orderEntity.itemInfoList = order.itemInfoList.map(function(itemInfo) {
                     var orderItemEntity = {};
-                    orderItemEntity[templateDefinition.orderDetailTemplateFieldKeys.orderItemId] = order.orderId + "_" + index++;
-                    orderItemEntity[templateDefinition.orderDetailTemplateFieldKeys.orderId] = order.orderId;
-                    orderItemEntity[templateDefinition.orderDetailTemplateFieldKeys.skuName] = itemInfo.skuName;
-                    orderItemEntity[templateDefinition.orderDetailTemplateFieldKeys.itemTotal] = itemInfo.itemTotal;
-                    orderItemEntity[templateDefinition.orderDetailTemplateFieldKeys.skuId] = itemInfo.skuId;
-                    orderItemEntity[templateDefinition.orderDetailTemplateFieldKeys.jdPrice] = itemInfo.jdPrice;
-                    orderItemEntity[templateDefinition.orderDetailTemplateFieldKeys.giftPoint] = itemInfo.giftPoint;
-                    orderItemEntity[templateDefinition.orderDetailTemplateFieldKeys.productNo] = itemInfo.productNo;
+                    orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.orderItemId] = order.orderId + "_" + index++;
+                    orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.orderId] = order.orderId;
+                    orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.skuName] = itemInfo.skuName;
+                    orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.itemTotal] = itemInfo.itemTotal;
+                    orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.skuId] = itemInfo.skuId;
+                    orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.jdPrice] = itemInfo.jdPrice;
+                    orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.giftPoint] = itemInfo.giftPoint;
+                    orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.productNo] = itemInfo.productNo;
                     return orderItemEntity;
                 })
                 return orderEntity;
@@ -698,7 +634,7 @@
         function getOrderListFromTemplateByFilter(filter, orderListHandler) {
             console.log("getOrderListFromTemplateByFilter");
             $.ajax({
-                url: baseUrl + "/api/" + templateDefinition.orderTemplateId, //接口：api/{模板ID}
+                url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId, //接口：api/{模板ID}
                 type: "get",
                 headers: getHeaders(),
                 data: {
@@ -738,7 +674,7 @@
             //var data = {"1269":"2","1270":"2018-03-28 14:09:44","1271":"2018-04-05 14:09:46","1272":"阿三大多4","1273":"32","1274":"adsd","1275":"阿斯顿","1276":"萨达","1277":"4968489","1278":"12365","1279":"0","1280":"","1281":"","1282":"","1283":"","1284":"","1293":"","1295":"","1296":"","1297":""};
             var data = orderList;
             $.ajax({
-                url: baseUrl + "/api/" + templateDefinition.orderTemplateId, //接口：api/{模板ID}
+                url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId, //接口：api/{模板ID}
                 type: "post", //使用post方法
                 headers: getHeaders(),
                 data: JSON.stringify(data), //将数据对象转换为字符串
@@ -769,14 +705,14 @@
 					//return false;
                     //JD订单列表转化为JF模板格式
                     var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
-                        return templateDefinition.convertToOrderTemplateEntity(order);
+                        return jdTemplateDefinition.convertToOrderTemplateEntity(order);
                     });
                     //orderEntityListConvertFromJDOrderList 待传入JF数据List
                     console.log("orderEntityListConvertFromJDOrderList:"+JSON.stringify(orderEntityListConvertFromJDOrderList));
 
                     orderEntityListConvertFromJDOrderList.forEach(function(jdOrderEntity) {
-                        jdOrderEntity.key = templateDefinition.orderTemplateFieldKeys.orderId;
-                        jdOrderEntity.value = jdOrderEntity[templateDefinition.orderTemplateFieldKeys.orderId];
+                        jdOrderEntity.key = jdTemplateDefinition.orderTemplateFieldKeys.orderId;
+                        jdOrderEntity.value = jdOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId];
                         jdOrderEntity.addifno = true;
                     });
 
@@ -787,19 +723,19 @@
                         var finishedStatusOrderIds = [];
                         orderEntityList.forEach(function(jfOrderEntity) {
                             var notInJdListOrder = orderEntityListConvertFromJDOrderList.myfind(function(jdOrderEntity) {
-                                return equals(jfOrderEntity[templateDefinition.orderTemplateFieldKeys.orderId], jdOrderEntity[templateDefinition.orderTemplateFieldKeys.orderId]);
+                                return equals(jfOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId], jdOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId]);
                             })
                             if (null == notInJdListOrder) {
-                                //jfOrderEntity[templateDefinition.orderTemplateFieldKeys.orderState] = "FINISHED_L";
-                                finishedStatusOrderIds.push(jfOrderEntity[templateDefinition.orderTemplateFieldKeys.orderId]);
+                                //jfOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderState] = "FINISHED_L";
+                                finishedStatusOrderIds.push(jfOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId]);
                             }
                         });
                         finishedStatusOrderIds.forEach(function(orderId) {
                             var finishedOrder = {};
-                            finishedOrder[templateDefinition.orderTemplateFieldKeys.orderId] = orderId;
-                            finishedOrder[templateDefinition.orderTemplateFieldKeys.orderState] = "FINISHED_L";
+                            finishedOrder[jdTemplateDefinition.orderTemplateFieldKeys.orderId] = orderId;
+                            finishedOrder[jdTemplateDefinition.orderTemplateFieldKeys.orderState] = "FINISHED_L";
 
-                            finishedOrder.key = templateDefinition.orderTemplateFieldKeys.orderId;
+                            finishedOrder.key = jdTemplateDefinition.orderTemplateFieldKeys.orderId;
                             finishedOrder.value = orderId;
                             orderEntityListConvertFromJDOrderList.push(finishedOrder);
                         });
@@ -807,11 +743,11 @@
                             //console.log(JSON.stringify(orderEntityListConvertFromJDOrderList))
                         var orderItemList = [];
                         orderEntityListConvertFromJDOrderList.forEach(function(orderEntity) {
-                            if (orderEntity[templateDefinition.orderTemplateFieldKeys.orderState] != "FINISHED_L") {
+                            if (orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderState] != "FINISHED_L") {
                                 orderEntity.itemInfoList.forEach(function(itemEntity) {
-                                    //itemEntity[templateDefinition.orderDetailTemplateFieldKeys.orderItemId]=itemEntity[templateDefinition.orderDetailTemplateFieldKeys.orderItemId];
-                                    itemEntity.key = templateDefinition.orderDetailTemplateFieldKeys.orderItemId;
-                                    itemEntity.value = itemEntity[templateDefinition.orderDetailTemplateFieldKeys.orderItemId];
+                                    //itemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.orderItemId]=itemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.orderItemId];
+                                    itemEntity.key = jdTemplateDefinition.orderDetailTemplateFieldKeys.orderItemId;
+                                    itemEntity.value = itemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.orderItemId];
                                     itemEntity.addifno = true;
                                     orderItemList.push(itemEntity);
                                 });
@@ -821,7 +757,7 @@
                         //console.log(JSON.stringify(orderItemList));
                         //批量保存jd订单明细（新增，按订单明细编号选择性更新字段）
                         $.ajax({
-                            url: baseUrl + "/api/" + templateDefinition.orderDetailTemplateId, //接口：api/{模板ID}
+                            url: baseUrl + "/api/" + jdTemplateDefinition.orderDetailTemplateId, //接口：api/{模板ID}
                             type: "put", //使用put方法
                             headers: getHeaders(),
                             data: JSON.stringify(orderItemList),
@@ -831,7 +767,7 @@
                         });
                         //批量保存jd订单（新增，按订单号选择性更新字段）
                         $.ajax({
-                            url: baseUrl + "/api/" + templateDefinition.orderTemplateId, //接口：api/{模板ID}
+                            url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId, //接口：api/{模板ID}
                             type: "put", //使用put方法
                             headers: getHeaders(),
                             data: JSON.stringify(orderEntityListConvertFromJDOrderList),
@@ -894,12 +830,12 @@
                     var deliverCode = data[0];
                     console.log("分配的运单号是：" + deliverCode);
                     var row = {};
-                    row[templateDefinition.orderTemplateFieldKeys.deliverInfoCode] = deliverCode;
-                    row.key = templateDefinition.orderTemplateFieldKeys.orderId;
+                    row[jdTemplateDefinition.orderTemplateFieldKeys.deliverInfoCode] = deliverCode;
+                    row.key = jdTemplateDefinition.orderTemplateFieldKeys.orderId;
                     row.value = orderId;
                     list.push(row);
                     $.ajax({
-                        url: baseUrl + "/api/" + templateDefinition.orderTemplateId, //接口：api/{模板ID}
+                        url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId, //接口：api/{模板ID}
                         type: "put", //使用put方法
                         headers: getHeaders(),
                         data: JSON.stringify(list),
