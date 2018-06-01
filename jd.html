@@ -1047,8 +1047,8 @@
         function jdResponseCheck(data) {
             var errorRes = JSON.parse(data).code;
             if (errorRes) {
-                console.log(JSON.stringify(errorRes));
-                if (errorRes == "19") {
+                console.log(errorRes);
+                if (errorRes == 19) {
                     iziToast.error({
                         title: '授权到期!',
                         message: "需重新获取JD店铺授权！" + shopConfig.shopName
