@@ -696,10 +696,11 @@
             }
             shopConfig = jdShopConfigs[jdShopIndex++];
            // loginShop(shopConfig, function(name) {
-                console.log("downloadOrderList");
                 getOrderList(function(orderList) {
                     console.log("getOrderList抓取京东全部未完成订单完毕,size:" + orderList.length);
-					//return false;
+					console.log(shopConfig.shopName)
+					console.log(orderList);
+					return false;
                     //JD订单列表转化为JF模板格式
                     var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
                         return jdTemplateDefinition.convertToOrderTemplateEntity(order);
