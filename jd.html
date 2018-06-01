@@ -480,9 +480,9 @@
                 url: url,
                 type: "post", //使用post方法
                 data: data,
-				dataType: 'json',
 				async: false,
                 success: function(data) {
+					jdResponseCheck(data)
 					console.log(data)
                     var pageReslut = data;
                     console.log("getOrderPageData  success，本页数据条数：" + pageReslut.orderInfoList.length);
@@ -1044,10 +1044,10 @@
         }
 
         function jdResponseCheck(data) {
-            var errorRes = JSON.parse(data).error_response;
+            var errorRes = JSON.parse(data).code;
             if (errorRes) {
                 console.log(JSON.stringify(errorRes));
-                if (errorRes.code == 19) {
+                if (errorRes == 19) {
                     iziToast.error({
                         title: '授权到期!',
                         message: "需重新获取JD店铺授权！" + shopConfig.shopName
