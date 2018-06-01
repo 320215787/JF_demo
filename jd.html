@@ -656,8 +656,8 @@
                 orderEntity[templateDefinition.orderTemplateFieldKeys.mobile] = order.consigneeInfo.mobile;
 
                 orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceInfo] = order.invoiceInfo;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceEasyInfo.invoiceTitle;
-                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceEasyInfo.invoiceCode;
+                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceTitle] = order.invoiceTitle;
+                orderEntity[templateDefinition.orderTemplateFieldKeys.invoiceCode] = order.invoiceCode;
 
                 orderEntity[templateDefinition.orderTemplateFieldKeys.venderRemark] = order.venderRemark;
                 orderEntity[templateDefinition.orderTemplateFieldKeys.orderRemark] = order.orderRemark;
@@ -765,7 +765,7 @@
                 console.log("downloadOrderList");
                 getOrderList(function(orderList) {
                     console.log("getOrderList抓取京东全部未完成订单完毕,size:" + orderList.length);
-					return false;
+					//return false;
                     //JD订单列表转化为JF模板格式
                     var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
                         return templateDefinition.convertToOrderTemplateEntity(order);
@@ -861,14 +861,6 @@
          * @param deliverInfoLogisticsId 物流公司编号
          * @param deliverInfoCodeHandler 物流公司分配的运单号处理函数
          */
-		 
-		 function tbOutStrageOnLine(orderId,companyCode){
-				console.log(orderId+"---"+companyCode);
-			}
-			
-			function tbOutStrageOffLine(orderId,outSid,companyCode){
-				console.log(orderId+"---"+outSid+"---"+companyCode);
-			}
 		 
         function getDeliverInfoCode(orderId, deliverInfoLogisticsId) {
             //https://api.jd.com/routerjson?v=2.0&method=jingdong.etms.waybillcode.get&app_key=8F3A3F4A4C2C8CC7FC2B351B2F4F785E&access_token=5d2a449c-6de0-40c3-9649-df0c07b6aa64&360buy_param_json={"preNum":"1","customerCode":"021K35939","orderType":"0"}&timestamp=2018-04-21 11:40:03&sign=ED35D1864B807C55752F807B1BE6D61E
