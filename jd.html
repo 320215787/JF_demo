@@ -485,6 +485,7 @@
 					jdResponseCheck(data)
 					console.log(data)
                     var pageReslut = JSON.parse(data);
+					console.log(pageReslut)
                     console.log("getOrderPageData  success，本页数据条数：" + pageReslut.orderInfoList.length);
                     //var orderInfoList = pageReslut.orderInfoList;
                     pageReslutHandler(pageReslut);
@@ -1047,7 +1048,7 @@
             var errorRes = JSON.parse(data).code;
             if (errorRes) {
                 console.log(JSON.stringify(errorRes));
-                if (errorRes == 19) {
+                if (errorRes == "19") {
                     iziToast.error({
                         title: '授权到期!',
                         message: "需重新获取JD店铺授权！" + shopConfig.shopName
