@@ -309,7 +309,7 @@
     <script type="text/javascript">
         console.log("load");
         //region jd全局配置
-        var shopConfigs = [{
+        var jdShopConfigs = [{
 			id: "A JF旗舰",
             appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
             accessToken: "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
@@ -333,7 +333,7 @@
         }
 		];
 
-        var shopConfig = shopConfigs[0];
+        var shopConfig = jdShopConfigs[0];
 		
        /* function loginShop(thisShopConfig, success) {
             shopConfig = thisShopConfig;
@@ -482,12 +482,9 @@
                 data: data,
 				async: false,
                 success: function(data) {
-					jdResponseCheck(data)
-					console.log(data)
+					jdResponseCheck(data)	
                     var pageReslut = JSON.parse(data);
-					console.log(pageReslut)
                     console.log("getOrderPageData  success，本页数据条数：" + pageReslut.orderInfoList.length);
-                    //var orderInfoList = pageReslut.orderInfoList;
                     pageReslutHandler(pageReslut);
                 }
             })
@@ -686,18 +683,18 @@
         var jdShopIndex = 0;
 
         function importJDOrderList() {
-            if (jdShopIndex >= shopConfigs.length) {
+            if (jdShopIndex >= jdShopConfigs.length) {
                 jdShopIndex = 0;
                 /*iziToast.success({
-                    title: 'JD '+(shopConfigs.length)+' 个门店订单数据同步成功！',
+                    title: 'JD '+(jdShopConfigs.length)+' 个门店订单数据同步成功！',
                     message: "",
                     position: 'bottomRight'
                 });*/
-                console.log('JD ' + (shopConfigs.length) + ' 个门店订单数据同步成功！');
+                console.log('JD ' + (jdShopConfigs.length) + ' 个门店订单数据同步成功！');
                 self.parent.frames["mainFrame"].location.reload(true);
                 return;
             }
-            shopConfig = shopConfigs[jdShopIndex++];
+            shopConfig = jdShopConfigs[jdShopIndex++];
            // loginShop(shopConfig, function(name) {
                 console.log("downloadOrderList");
                 getOrderList(function(orderList) {
