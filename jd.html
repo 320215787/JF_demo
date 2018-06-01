@@ -484,7 +484,7 @@
                 success: function(data) {
 					jdResponseCheck(data)
 					console.log(data)
-                    var pageReslut = data;
+                    var pageReslut = JSON.parse(data);
                     console.log("getOrderPageData  success，本页数据条数：" + pageReslut.orderInfoList.length);
                     //var orderInfoList = pageReslut.orderInfoList;
                     pageReslutHandler(pageReslut);
