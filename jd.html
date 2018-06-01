@@ -714,7 +714,7 @@
                     // 标记已经完成的订单
                     getOrderListFromTemplateByFilter("NotFinished", function(orderEntityList) {
 						console.log(orderEntityList);
-						return false;
+						
                         console.log("getOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
                         //console.log("orderEntityList（getOrderListFromTemplateByFilter）:"+JSON.stringify(orderEntityList));
                         var finishedStatusOrderIds = [];
@@ -727,6 +727,9 @@
                                 finishedStatusOrderIds.push(jfOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId]);
                             }
                         });
+						console.log(orderEntityListConvertFromJDOrderList);
+						console.log(finishedStatusOrderIds);
+						return false;
                         finishedStatusOrderIds.forEach(function(orderId) {
                             var finishedOrder = {};
                             finishedOrder[jdTemplateDefinition.orderTemplateFieldKeys.orderId] = orderId;
