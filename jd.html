@@ -698,9 +698,6 @@
            // loginShop(shopConfig, function(name) {
                 getOrderList(function(orderList) {
                     console.log("getOrderList抓取京东全部未完成订单完毕,size:" + orderList.length);
-					console.log(shopConfig.shopName)
-					console.log(orderList);
-					return false;
                     //JD订单列表转化为JF模板格式
                     var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
                         return jdTemplateDefinition.convertToOrderTemplateEntity(order);
@@ -713,7 +710,8 @@
                         jdOrderEntity.value = jdOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId];
                         jdOrderEntity.addifno = true;
                     });
-
+					console.log(orderEntityListConvertFromJDOrderList);
+					return false;
                     // 标记已经完成的订单
                     getOrderListFromTemplateByFilter("NotFinished", function(orderEntityList) {
                         console.log("getOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
