@@ -703,17 +703,18 @@
                         return jdTemplateDefinition.convertToOrderTemplateEntity(order);
                     });
                     //orderEntityListConvertFromJDOrderList 待传入JF数据List
-                    console.log("orderEntityListConvertFromJDOrderList:"+JSON.stringify(orderEntityListConvertFromJDOrderList));
+                   // console.log("orderEntityListConvertFromJDOrderList:"+JSON.stringify(orderEntityListConvertFromJDOrderList));
 
                     orderEntityListConvertFromJDOrderList.forEach(function(jdOrderEntity) {
                         jdOrderEntity.key = jdTemplateDefinition.orderTemplateFieldKeys.orderId;
                         jdOrderEntity.value = jdOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId];
                         jdOrderEntity.addifno = true;
                     });
-					console.log(orderEntityListConvertFromJDOrderList);
-					return false;
+					
                     // 标记已经完成的订单
                     getOrderListFromTemplateByFilter("NotFinished", function(orderEntityList) {
+						console.log(orderEntityList);
+						return false;
                         console.log("getOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
                         //console.log("orderEntityList（getOrderListFromTemplateByFilter）:"+JSON.stringify(orderEntityList));
                         var finishedStatusOrderIds = [];
