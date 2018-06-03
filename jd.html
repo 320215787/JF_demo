@@ -634,12 +634,12 @@
                     console.log("getJDOrderListFromTemplateByFilter success" + result.data.length);
                     var data = result.data;
                     var orderEntityList = data.map(function(jfTemplateDataElement) {
-					//if(jfTemplateDataElement.){
+					
                         var orderEntity = jfTemplateDataElement.fields;
                         orderEntity.id = jfTemplateDataElement.id;
-						
+					if(orderEntity.1095!=shopConfig.shopName){
                         return orderEntity;
-					//	}
+						}
                     });
                     orderListHandler(orderEntityList);
                 },
