@@ -637,7 +637,6 @@
 					
                         var orderEntity = jfTemplateDataElement.fields;
                         orderEntity.id = jfTemplateDataElement.id;
-						console.log(orderEntity)
                         return orderEntity;
                     });
                     orderListHandler(orderEntityList);
@@ -759,7 +758,6 @@
                         })
 						
                         console.log("需更新订单明细数：" + orderItemList.length);
-						return false;
 						
                         //console.log(JSON.stringify(orderItemList));
                         //批量保存jd订单明细（新增，按订单明细编号选择性更新字段）
