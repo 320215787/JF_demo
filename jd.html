@@ -637,7 +637,8 @@
 					
                         var orderEntity = jfTemplateDataElement.fields;
                         orderEntity.id = jfTemplateDataElement.id;
-					if(orderEntity.1095!=shopConfig.shopName){
+						console.log(orderEntity)
+					   if(orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.shopName]!=shopConfig.shopName){
                         return orderEntity;
 						}
                     });
