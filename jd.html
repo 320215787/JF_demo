@@ -542,6 +542,7 @@
                 }
             }).done(function(res) { //请求完成后的处理。下文将省略此部分
                 apiToken = res.token.token;
+				loadShopFormJF();
                 //$.cookie("token", res.token, { expires: 30 });
             }).fail(function(jqXHR, textStatus, errMsg) { //请求失败后的处理。下文将省略此部分
                 iziToast.error({
@@ -1058,7 +1059,7 @@
         $(function() {
             console.log("reday exc apiCallerInit");
             apiCallerInit();
-			loadShopFormJF();
+			
 			console.log(jdShopConfigs);
 			
             console.log("reday exc loadShop");
