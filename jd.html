@@ -638,9 +638,7 @@
                         var orderEntity = jfTemplateDataElement.fields;
                         orderEntity.id = jfTemplateDataElement.id;
 						console.log(orderEntity)
-					   if(orderEntity[jdTemplateDefinition.orderTemplateFieldKeys.shopName]!=shopConfig.shopName){
                         return orderEntity;
-						}
                     });
                     orderListHandler(orderEntityList);
                 },
@@ -716,6 +714,13 @@
                         console.log("getJDOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
                         //console.log("orderEntityList（getJDOrderListFromTemplateByFilter）:"+JSON.stringify(orderEntityList));
                         var finishedStatusOrderIds = [];
+						
+						for(var i = 0;i<orderEntityList.length;i++){
+							if(orderEntityList[i][jdTemplateDefinition.orderTemplateFieldKeys.shopName]!=shopConfig.shopName){
+								orderEntityList.splice(i,1);
+							}
+						}
+						
                         orderEntityList.forEach(function(jfOrderEntity) {
                             var notInJdListOrder = orderEntityListConvertFromJDOrderList.myfind(function(jdOrderEntity) {
                                 return equals(jfOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId], jdOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId]);
