@@ -700,7 +700,7 @@
            // loginShop(shopConfig, function(name) {
                 getOrderList(function(orderList) {
                     console.log("getOrderList抓取京东全部未完成订单完毕,size:" + orderList.length);
-					return false;
+					
                     //JD订单列表转化为JF模板格式
                     var orderEntityListConvertFromJDOrderList = orderList.map(function(order) {
                         return jdTemplateDefinition.convertToOrderTemplateEntity(order);
@@ -759,6 +759,7 @@
                         })
 						
                         console.log("需更新订单明细数：" + orderItemList.length);
+						return false;
                         //console.log(JSON.stringify(orderItemList));
                         //批量保存jd订单明细（新增，按订单明细编号选择性更新字段）
                         $.ajax({
