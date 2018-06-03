@@ -724,16 +724,16 @@
                         console.log("getJDOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
                         //console.log("orderEntityList（getJDOrderListFromTemplateByFilter）:"+JSON.stringify(orderEntityList));
                         var finishedStatusOrderIds = [];
-						
+						var newOrderEntityList = [];
 						for(var i = 0;i<orderEntityList.length;i++){
-							if(orderEntityList[i][jdTemplateDefinition.orderTemplateFieldKeys.shopName]!=shopConfig.shopName){
-								orderEntityList.splice(i,1);
+							if(orderEntityList[i][jdTemplateDefinition.orderTemplateFieldKeys.shopName]==shopConfig.shopName){
+								newOrderEntityList.push(orderEntityList[i]);
 							}
 						}
 						
-						console.log(orderEntityList);
+						console.log(newOrderEntityList);
 						
-                        orderEntityList.forEach(function(jfOrderEntity) {
+                        newOrderEntityList.forEach(function(jfOrderEntity) {
                             var notInJdListOrder = orderEntityListConvertFromJDOrderList.myfind(function(jdOrderEntity) {
                                 return equals(jfOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId], jdOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId]);
                             })
