@@ -720,6 +720,8 @@
 							}
 						}
 						
+						console.log(orderEntityList);
+						
                         orderEntityList.forEach(function(jfOrderEntity) {
                             var notInJdListOrder = orderEntityListConvertFromJDOrderList.myfind(function(jdOrderEntity) {
                                 return equals(jfOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId], jdOrderEntity[jdTemplateDefinition.orderTemplateFieldKeys.orderId]);
@@ -730,8 +732,7 @@
                             }
                         });
 						console.log(orderEntityListConvertFromJDOrderList);
-						console.log(finishedStatusOrderIds);
-						
+												
                         finishedStatusOrderIds.forEach(function(orderId) {
                             var finishedOrder = {};
                             finishedOrder[jdTemplateDefinition.orderTemplateFieldKeys.orderId] = orderId;
