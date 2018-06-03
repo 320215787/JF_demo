@@ -308,8 +308,10 @@
     </script>
     <script type="text/javascript">
         console.log("load");
+		var jdShopConfigs;
+		var shopConfig;
         //region jd全局配置
-        var jdShopConfigs = [{
+       /* var jdShopConfigs = [{
 			id: "A JF旗舰",
             appSecret: "c5c97d7eb61a4d8fbcaf563da0687cac",
             accessToken: "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
@@ -335,7 +337,7 @@
 		];
 
         var shopConfig = jdShopConfigs[0];
-		
+	*/
        /* function loginShop(thisShopConfig, success) {
             shopConfig = thisShopConfig;
             console.log("loadShop " + shopConfig.id);
@@ -548,7 +550,25 @@
                 });
             });
         }
-        
+        var jdShopTemplateDefinition = {
+			shopTemplateId: 101, //店铺id
+			shopTemplateFieldKeys: {
+				"shopName": "1146", //店铺名称
+				"userName": "1147", //登陆账号
+				"shopId": "1148", //商家ID
+				"shopToken": "1149", //店铺token
+				"shopType": "1152" //店铺平台
+			},
+			convertToShopTemplateEntity: function(shop) {
+				var shopEntity = new Object();
+				shopEntity.shopName = shop[jdShopTemplateDefinition.shopTemplateFieldKeys.shopName];
+				shopEntity.userName = shop[jdShopTemplateDefinition.shopTemplateFieldKeys.userName];
+				shopEntity.shopId = shop[jdShopTemplateDefinition.shopTemplateFieldKeys.shopId];
+				shopEntity.accessToken = shop[jdShopTemplateDefinition.shopTemplateFieldKeys.shopToken];
+				shopEntity.shopType = shop[jdShopTemplateDefinition.shopTemplateFieldKeys.shopType];
+				return shopEntity;
+			}
+		}
         var jdTemplateDefinition = {
             orderTemplateId: 97, //在线订单模板表id
             orderTemplateFieldKeys: {
@@ -645,7 +665,6 @@
                     console.log("getJDOrderListFromTemplateByFilter success" + result.data.length);
                     var data = result.data;
                     var orderEntityList = data.map(function(jfTemplateDataElement) {
-					
                         var orderEntity = jfTemplateDataElement.fields;
                         orderEntity.id = jfTemplateDataElement.id;
                         return orderEntity;
@@ -1010,10 +1029,38 @@
                 }
             }
         };
-
+		function loadShopFormJF(){
+			$.ajax({
+			 url: baseUrl + "/api/" + jdShopTemplateDefinition.shopTemplateId, //接口：api/{模板ID}
+			type: "get",
+			headers: getHeaders(),
+			success: function(result) {
+				var data = result.data;
+				var shopEntityList = data.map(function(jfTemplateDataElement) {
+					var orderEntity = jfTemplateDataElement.fields;
+					return orderEntity;
+				});
+				var shopListConvertFromJDOrderList = shopEntityList.map(function(shop) {
+					return jdShopTemplateDefinition.convertToShopTemplateEntity(shop);
+				});
+				var a = [];
+				shopListConvertFromJDOrderList.forEach(function(i) {
+					if(i.shopType == "京东") {
+						a.push(i)
+					}
+				})
+				jdShopConfigs = a;
+				shopConfig = jdShopConfigs[0];
+				
+			}
+		})
+	}
         $(function() {
             console.log("reday exc apiCallerInit");
             apiCallerInit();
+			loadShopFormJF();
+			console.log(jdShopConfigs);
+			
             console.log("reday exc loadShop");
             loadShop(shopConfig);
             console.log("reday exc importJDOrderListBtnBind");
