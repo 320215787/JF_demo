@@ -627,7 +627,6 @@
                 data: {
                     filter: filter, //过滤器名称(可选)。指定了filter，将忽略search和key参数
                     page: 0, //页码(可选)。从0起计，默认值：0
-					key: shopConfig.shopName,
                     pagesize: 300 //每页数量(可选)。默认值：表格视图默认版式的每页数量
                 },
                 success: function(result) {
@@ -706,7 +705,7 @@
                     });
 					
                     // 标记已经完成的订单
-                    getJDOrderListFromTemplateByFilter("NotFinished", function(orderEntityList) {
+                    getJDOrderListFromTemplateByFilter("NotFinished|"+shopConfig.shopName, function(orderEntityList) {
 						console.log(orderEntityList);
 						
                         console.log("getJDOrderListFromTemplateByFilter抓取jf全部订单完毕,size: " + orderEntityList.length);
