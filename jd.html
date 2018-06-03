@@ -627,6 +627,7 @@
                 data: {
                     filter: filter, //过滤器名称(可选)。指定了filter，将忽略search和key参数
                     page: 0, //页码(可选)。从0起计，默认值：0
+					key: shopConfig.shopName,
                     pagesize: 300 //每页数量(可选)。默认值：表格视图默认版式的每页数量
                 },
                 success: function(result) {
@@ -749,6 +750,7 @@
                         })
 						
                         console.log("需更新订单明细数：" + orderItemList.length);
+						return false;
                         //console.log(JSON.stringify(orderItemList));
                         //批量保存jd订单明细（新增，按订单明细编号选择性更新字段）
                         $.ajax({
