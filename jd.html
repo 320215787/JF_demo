@@ -315,7 +315,7 @@
 		</script>
 		<script type="text/javascript">
 			console.log("load");
-			
+
 			var jdShopConfigs;
 			var shopConfig;
 			var tbShopConfigs;
@@ -1313,13 +1313,46 @@
 			}
 
 			function tbOutStrageOnLine(tbOrderId, companyCode) {
-				alert(tbOrderId)
-				console.log(tbOrderId + "---" + companyCode);
+				$.ajax({
+					url: "http://114.67.70.80:8080/zboss/data/deliverGoodsOnline",
+					type: "post",
+					data: {
+						"accessToken": tbShopConfig.accessToken,
+						"tid": tbOrderId,
+						"companyCode": companyCode,
+					},
+					success: function(data) {
+						console.log("淘宝订单:" + tbOrderId + ",线上出库成功");
+						console.log(data);
+						iziToast.success({
+							title: "淘宝订单:" + tbOrderId + ",线上出库成功",
+							message: data,
+							position: 'bottomRight'
+						});
+					}
+				});
 			}
 
 			function tbOutStrageOffLine(tbOrderId, outSid, companyCode) {
-				alert(tbOrderId)
-				console.log(tbOrderId + "---" + outSid + "---" + companyCode);
+				$.ajax({
+					url: "http://114.67.70.80:8080/zboss/data/deliverGoodsOffline",
+					type: "post",
+					data: {
+						"accessToken": tbShopConfig.accessToken,
+						"tid": tbOrderId,
+						"outSid": outSid,
+						"companyCode": companyCode,
+					},
+					success: function(data) {
+						console.log("淘宝订单:" + tbOrderId + ",线下出库成功,运单号:" + outSid);
+						console.log(data);
+						iziToast.success({
+							title: "淘宝订单:" + tbOrderId + ",线下出库成功,运单号:" + outSid,
+							message: data,
+							position: 'bottomRight'
+						});
+					}
+				});
 			}
 
 			function tbResponseCheck(data) {
