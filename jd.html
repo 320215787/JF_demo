@@ -543,6 +543,7 @@
                 }
             }).done(function(res) { //请求完成后的处理。下文将省略此部分
                 apiToken = res.token.token;
+				console.log("JF登录成功")
 				loadShopFormJF();
                 //$.cookie("token", res.token, { expires: 30 });
             }).fail(function(jqXHR, textStatus, errMsg) { //请求失败后的处理。下文将省略此部分
