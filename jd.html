@@ -1049,7 +1049,7 @@
 			//分页获取tb订单数据
 			function getTBOrderPageData(page, pageSize, pageResultHandler) {
 				console.log("getTBOrderPageData");
-				var url = "http://114.67.70.80:8080/zboss/data/getOrder";
+				var url = "http://106.15.57.246:8080/zboss/data/getOrder";
 				var data = {
 					"accessToken": tbShopConfig.accessToken,
 					"page": page,
@@ -1314,7 +1314,7 @@
 
 			function tbOutStrageOnLine(tbOrderId, companyCode) {
 				$.ajax({
-					url: "http://114.67.70.80:8080/zboss/data/deliverGoodsOnline",
+					url: "http://106.15.57.246:8080/zboss/data/deliverGoodsOnline",
 					type: "post",
 					data: {
 						"accessToken": tbShopConfig.accessToken,
@@ -1335,7 +1335,7 @@
 
 			function tbOutStrageOffLine(tbOrderId, outSid, companyCode) {
 				$.ajax({
-					url: "http://114.67.70.80:8080/zboss/data/deliverGoodsOffline",
+					url: "http://106.15.57.246:8080/zboss/data/deliverGoodsOffline",
 					type: "post",
 					data: {
 						"accessToken": tbShopConfig.accessToken,
