@@ -1090,19 +1090,20 @@
 			 * @param {Object} rid
 			 */
 			function getShopAccessToken(rid) {
-				var accessToken = "";
+				var thisAccessToken = "";
 				getCustomerInfoFromJF(rid, function(customerInfo) {
 					console.log(customerInfo)
 					var allShops = jdShopConfigs.concat(tbShopConfigs);
 					console.log(allShops);
-					allShops.forEach(function(shop) {
-						if(shop.shopName == customerInfo.shopName) {
-							accessToken = shop.accessToken;
+					allShops.forEach(function(thisShop) {
+						if(thisShop.shopName == customerInfo.shopName) {
+							thisAccessToken = thisShop.accessToken;
+							console.log(thisAccessToken);
 							return;
 						}
 					})
 				})
-				return accessToken;
+				return thisAccessToken;
 			}
 
 			function loadShopFormJF() {
