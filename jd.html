@@ -880,7 +880,7 @@
 			 * @param deliverInfoLogisticsId 物流公司编号var rid = $(this).parent().parent().attr("rid");
 			 * @param deliverInfoCodeHandler 物流公司分配的运单号处理函数
 			 */
-			function getDeliverInfoCode(bton,orderId, deliverInfoLogisticsId) {
+			function getDeliverInfoCode(bton, orderId, deliverInfoLogisticsId) {
 				if(deliverInfoLogisticsId != 2087) {
 					console.log(orderId + "---" + deliverInfoLogisticsId)
 					iziToast.error({
@@ -948,18 +948,18 @@
 				var thisToken = getShopAccessToken(rid);
 				if(deliverInfoLogisticsId == 2087) {
 					//jd快递接单
-					innerSendDeliver(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, function() {
+					innerSendDeliver(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, function() {
 						//出库
 						console.log("innerOutStorage");
-						innerOutStorage(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
+						innerOutStorage(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
 					});
 				} else {
-					innerOutStorage(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
+					innerOutStorage(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
 				}
 
 			}
 
-			function innerSendDeliver(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, successHandler) {
+			function innerSendDeliver(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, successHandler) {
 				// var url='https://api.jd.com/routerjson?v=2.0&method=jingdong.etms.waybill.send&app_key='+shopConfig.app_key+'&access_token='+shopConfig.access_token
 				//     +'&360buy_param_json={"deliveryId":"'
 				//     +deliverInfoCode+'","salePlat":"'+salePlat+'","customerCode":"'+customerCode+'","orderId":"'+orderId+'","thrOrderId":"","selfPrintWayBill":"","pickMethod":"","packageRequired":"","senderName":"'
@@ -1046,7 +1046,7 @@
 				})
 			}
 
-			function innerOutStorage(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount) {
+			function innerOutStorage(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount) {
 				//var url = 'https://api.jd.com/routerjson?v=2.0&method=360buy.order.sop.outstorage&app_key='+shopConfig.app_key+"&access_token="+shopConfig.access_token
 				//   +'&360buy_param_json={"logistics_id":"'+deliverInfoLogisticsId+'","waybill":"'+deliverInfoCode+'","order_id":"'+orderId+'","trade_no":""}';
 
@@ -1090,15 +1090,19 @@
 			 * @param {Object} rid
 			 */
 			function getShopAccessToken(rid) {
+				var accessToken = "";
 				getCustomerInfoFromJF(rid, function(customerInfo) {
 					console.log(customerInfo)
 					var allShops = jdShopConfigs.concat(tbShopConfigs);
 					allShops.forEach(function(shop) {
 						if(customerInfo.shopName == shop.shopName) {
-							return shop.accessToken;
+							accessToken = shop.accessToken;
+							break;
 						}
 					})
+					
 				})
+				return accessToken;
 			}
 
 			function loadShopFormJF() {
@@ -1490,7 +1494,7 @@
 					}
 				}
 			};
-			
+
 			$(function() {
 				console.log("reday exc apiCallerInit");
 				apiCallerInit();
