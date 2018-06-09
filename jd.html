@@ -1096,7 +1096,7 @@
 					var allShops = jdShopConfigs.concat(tbShopConfigs);
 					console.log(allShops);
 					allShops.forEach(function(shop) {
-						if(customerInfo.shopName == shop.shopName) {
+						if(shop.shopName == customerInfo.shopName) {
 							accessToken = shop.accessToken;
 							return;
 						}
