@@ -805,6 +805,20 @@
 					success: function(result) {
 						var data = result.data.fields;
 						return jdTemplateDefinition.convertToJDEntity(data);
+					},
+					error: function(xhr, status, error) {
+						if(status == 403) {
+							iziToast.error({
+								title: '蓝点系统登陆过期！',
+								message: 'apicaller登陆过期，已尝试自动重新登陆。请重新进行你的操作。'
+							});
+							apiCallerInit();
+						} else {
+							iziToast.error({
+								title: '蓝点系统调用失败',
+								message: 'apicaller无法调用蓝点API！'
+							});
+						}
 					}
 				});
 			}
