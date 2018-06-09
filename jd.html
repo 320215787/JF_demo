@@ -880,7 +880,7 @@
 			 * @param deliverInfoLogisticsId 物流公司编号var rid = $(this).parent().parent().attr("rid");
 			 * @param deliverInfoCodeHandler 物流公司分配的运单号处理函数
 			 */
-			function getDeliverInfoCode(orderId, deliverInfoLogisticsId) {
+			function getDeliverInfoCode(btn,orderId, deliverInfoLogisticsId) {
 				if(deliverInfoLogisticsId != 2087) {
 					console.log(orderId + "---" + deliverInfoLogisticsId)
 					iziToast.error({
@@ -890,8 +890,7 @@
 					});
 					return;
 				}
-				var rid = $(this).parent().parent().attr("rid");
-				console.log(rid);
+				var rid = $(btn).parent().parent().attr("rid");
 				var thisToken = getShopAccessToken(rid);
 				console.log(thisToken);
 				return false;
@@ -1091,7 +1090,6 @@
 			 */
 			function getShopAccessToken(rid) {
 				getCustomerInfoFromJF(rid, function(customerInfo) {
-					console.log(customerInfo)
 					var allShops = jdShopConfigs.concat(tbShopConfigs);
 					allShops.forEach(function(shop) {
 						if(customerInfo.shopName == shop.shopName) {
