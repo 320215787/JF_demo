@@ -809,69 +809,74 @@
 				});
 			}
 
-			function waybillReceive(providerId, orderId) {
-				var rid = $(this).parent().parent().attr("rid");
+			function waybillReceive(orderId, providerId, rid) {
 				getCustomerInfoFromJF(rid, function(customerInfo) {
-					var param = {
-						"content": {
-							"waybillType": 1,
-							"waybillCount": 1,
-							"providerId": providerId, // 承运商ID
-							//"providerCode": providerCode, //承运商编码
-							//"branchCode": "1001",
-							"platformOrderNo": orderId, //订单ID
-							//"vendorCode": vendorCode, //商家编码
-							"vendorName": customerInfo.shopName, //商家名称
-							"vendorOrderCode": vendorOrderCode, //商家自有订单号
-							"salePlatform": salePlat,
-							"fromAddress": {
-								//"provinceId": 1,
-								//"provinceName": "XXX",
-								//"cityId": 232,
-								//"cityName": "YYY",
-								//"countryId": 1232,
-								//"countryName": "ZZZ",
-								//"countrysideId": 10098,
-								//"countrysideName": "CCC",
-								"address": senderAddress,
-								"contact": senderName,
-								"phone": senderTel,
-								"mobile": senderTel
-							},
-							"toAddress": {
-								//"provinceId": 12,
-								//"provinceName": "XXX",
-								//"cityId": 232,
-								//"cityName": "YYY",
-								//"countryId": 1232,
-								//"countryName": "ZZZ",
-								//	"countrysideId": 10098,
-								//"countrysideName": "CCC",
-								"address": customerInfo.fullAddress,
-								"contact": customerInfo.fullname,
-								"phone": customerInfo.telephone,
-								"mobile": customerInfo.mobile
-							},
-							"weight": 1, //重量 0
-							"volume": 1, //体积 0
-							"payType": 0, //付款方式0-在线支付
-							"shouldPayMoney": 22,
-							"needGuarantee": false,
-							"guaranteeMoney": 10
+					getShopAccessToken(rid, function(thisToken) {
+						var param = {
+							"content": {
+								"waybillType": 1,
+								"waybillCount": 1,
+								"providerId": providerId, // 承运商ID
+								//"providerCode": providerCode, //承运商编码
+								//"branchCode": "1001",
+								"platformOrderNo": orderId, //订单ID
+								//"vendorCode": vendorCode, //商家编码
+								"vendorName": customerInfo.shopName, //商家名称
+								"vendorOrderCode": vendorOrderCode, //商家自有订单号
+								"salePlatform": salePlat,
+								"fromAddress": {
+									//"provinceId": 1,
+									//"provinceName": "XXX",
+									//"cityId": 232,
+									//"cityName": "YYY",
+									//"countryId": 1232,
+									//"countryName": "ZZZ",
+									//"countrysideId": 10098,
+									//"countrysideName": "CCC",
+									"address": senderAddress,
+									"contact": senderName,
+									"phone": senderTel,
+									"mobile": senderTel
+								},
+								"toAddress": {
+									//"provinceId": 12,
+									//"provinceName": "XXX",
+									//"cityId": 232,
+									//"cityName": "YYY",
+									//"countryId": 1232,
+									//"countryName": "ZZZ",
+									//	"countrysideId": 10098,
+									//"countrysideName": "CCC",
+									"address": customerInfo.fullAddress,
+									"contact": customerInfo.fullname,
+									"phone": customerInfo.telephone,
+									"mobile": customerInfo.mobile
+								},
+								"weight": 1, //重量 0
+								"volume": 1, //体积 0
+								"payType": 0, //付款方式0-在线支付
+								"shouldPayMoney": 22,
+								"needGuarantee": false,
+								"guaranteeMoney": 10
+							}
 						}
-					}
-					$.ajax({
-						type: "post",
-						url: "http://127.0.0.1:8081/zboss/data/waybillReceive",
-						data: {
-							"accessToken": "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
-							"content": JSON.stringify(param)
-						},
-						dataType: 'json',
-						success: function(data) {
-
-						}
-					});
+						$.ajax({
+							type: "post",
+							url: "http://127.0.0.1:8081/zboss/data/waybillReceive",
+							data: {
+								"accessToken": thisToken,
+								"content": JSON.stringify(param)
+							},
+							dataType: 'json',
+							success: function(data) {
+								//返回运单号
+								var waybillCode = JSON.parse(data).jingdong_ldop_alpha_waybill_receive_response.resultInfo.data.waybillCodeList[0].waybillCode;
+								var waybillCodeArray = [];
+								waybillCodeArray.push(waybillCode);
+								saveDeliverCodeToJF(waybillCodeArray);
+							}
+						});
+					})
 				})
 			}
 
@@ -881,10 +886,10 @@
 			 * @param deliverInfoCodeHandler 物流公司分配的运单号处理函数
 			 */
 			function getDeliverInfoCode(bton, orderId, deliverInfoLogisticsId) {
-				if(deliverInfoLogisticsId != 2087) {
+				if(deliverInfoLogisticsId != 2087 || deliverInfoLogisticsId != 1499) {
 					console.log(orderId + "---" + deliverInfoLogisticsId)
 					iziToast.error({
-						title: '只有京东快递可以获取运单号!',
+						title: '只有京东快递与中通快递可以获取运单号!',
 						message: "",
 						position: 'bottomRight'
 					});
@@ -892,24 +897,28 @@
 				}
 				var rid = $(bton).parent().parent().attr("rid");
 				getShopAccessToken(rid, function(thisToken) {
-					console.log(thisToken);
-					return false;
-					var url = "http://114.67.70.80:8081/zboss/data/getEtmsWaybillCode";
-					$.ajax({
-						url: url,
-						type: "post", //使用post方法
-						dataType: 'json',
-						data: {
-							"accessToken": thisToken,
-							"preNum": "1",
-							"customerCode": customerCode,
-							"orderType": "0"
-						},
-						success: function(data) {
-							console.log(data);
-							saveDeliverCodeToJF(data);
-						}
-					})
+					if(deliverInfoLogisticsId == 2087) {
+						console.log(thisToken);
+						var url = "http://114.67.70.80:8081/zboss/data/getEtmsWaybillCode";
+						$.ajax({
+							url: url,
+							type: "post", //使用post方法
+							dataType: 'json',
+							data: {
+								"accessToken": thisToken,
+								"preNum": "1",
+								"customerCode": customerCode,
+								"orderType": "0"
+							},
+							success: function(data) {
+								console.log(data);
+								saveDeliverCodeToJF(data);
+							}
+						})
+					}
+					if(deliverInfoLogisticsId == 1499) {
+						waybillReceive(orderId, deliverInfoLogisticsId, rid);
+					}
 				});
 			}
 			/**
@@ -941,6 +950,34 @@
 					}
 				});
 
+			}
+			/**
+			 * 大头笔信息查询
+			 * @param {Object} waybillCode 运单号
+			 * @param {Object} providerId 承运商编码
+			 */
+			function bigshotQuery(bton, waybillCode, providerId) {
+				var rid = $(bton).parent().parent().attr("rid");
+				getShopAccessToken(rid, function(thisToken) {
+					var url = "http://114.67.70.80:8081/zboss/data/bigshotQuery";
+					$.ajax({
+						url: url,
+						type: "post", //使用post方法
+						dataType: 'json',
+						data: {
+							"accessToken": thisToken,
+							"waybillCode": waybillCode,
+							"providerCode": providerId
+						},
+						success: function(data) {
+							var data = JSON.parse(data).jingdong_ldop_alpha_vendor_bigshot_query_response.resultInfo.data;
+							var bigShotName = data.bigShotName; //大头笔名称，如果有值，需要打印到面单上
+							var gatherCenterName = data.gatherCenterName; //集包地名称，如果有值，需要打印到面单上
+							var secondSectionCode = data.secondSectionCode; //二段码，如果有值，需要打印到面单上
+							var thirdSectionCode = data.thirdSectionCode; //三段码，如果有值，需要打印到面单上
+						}
+					});
+				});
 			}
 
 			function outStrage(bton, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel) {
