@@ -891,8 +891,7 @@
 					return;
 				}
 				var rid = $(bton).parent().parent().attr("rid");
-				console.log(rid);
-				var thisToken = getShopAccessToken(rid, function(thisToken) {
+				getShopAccessToken(rid, function(thisToken) {
 					console.log(thisToken);
 					return false;
 					var url = "http://114.67.70.80:8081/zboss/data/getEtmsWaybillCode";
@@ -944,20 +943,20 @@
 
 			}
 
-			function outStrage(orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel) {
-				var rid = $(this).parent().parent().attr("rid");
-				var thisToken = getShopAccessToken(rid);
-				if(deliverInfoLogisticsId == 2087) {
-					//jd快递接单
-					innerSendDeliver(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, function() {
-						//出库
-						console.log("innerOutStorage");
+			function outStrage(bton, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel) {
+				var rid = $(bton).parent().parent().attr("rid");
+				getShopAccessToken(rid, function(thisToken) {
+					if(deliverInfoLogisticsId == 2087) {
+						//jd快递接单
+						innerSendDeliver(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, function() {
+							//出库
+							console.log("innerOutStorage");
+							innerOutStorage(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
+						});
+					} else {
 						innerOutStorage(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
-					});
-				} else {
-					innerOutStorage(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
-				}
-
+					}
+				});
 			}
 
 			function innerSendDeliver(thisToken, orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, successHandler) {
@@ -1440,51 +1439,53 @@
 
 			}
 
-			function tbOutStrageOnLine(tbOrderId, companyCode) {
-				var rid = $(this).parent().parent().attr("rid");
-				var thisToken = getShopAccessToken(rid);
-				$.ajax({
-					url: "http://106.15.57.246:30001/zboss/data/deliverGoodsOnline",
-					type: "post",
-					data: {
-						"accessToken": thisToken,
-						"tid": tbOrderId,
-						"companyCode": companyCode,
-					},
-					success: function(data) {
-						console.log("淘宝订单:" + tbOrderId + ",线上出库成功");
-						console.log(data);
-						iziToast.success({
-							title: "淘宝订单:" + tbOrderId + ",线上出库成功",
-							message: data,
-							position: 'bottomRight'
-						});
-					}
+			function tbOutStrageOnLine(bton, tbOrderId, companyCode) {
+				var rid = $(bton).parent().parent().attr("rid");
+				getShopAccessToken(rid, function(thisToken) {
+					$.ajax({
+						url: "http://106.15.57.246:30001/zboss/data/deliverGoodsOnline",
+						type: "post",
+						data: {
+							"accessToken": thisToken,
+							"tid": tbOrderId,
+							"companyCode": companyCode,
+						},
+						success: function(data) {
+							console.log("淘宝订单:" + tbOrderId + ",线上出库成功");
+							console.log(data);
+							iziToast.success({
+								title: "淘宝订单:" + tbOrderId + ",线上出库成功",
+								message: data,
+								position: 'bottomRight'
+							});
+						}
+					});
 				});
 			}
 
-			function tbOutStrageOffLine(tbOrderId, outSid, companyCode) {
-				var rid = $(this).parent().parent().attr("rid");
-				var thisToken = getShopAccessToken(rid);
-				$.ajax({
-					url: "http://106.15.57.246:30001/zboss/data/deliverGoodsOffline",
-					type: "post",
-					data: {
-						"accessToken": thisToken,
-						"tid": tbOrderId,
-						"outSid": outSid,
-						"companyCode": companyCode,
-					},
-					success: function(data) {
-						console.log("淘宝订单:" + tbOrderId + ",线下出库成功,运单号:" + outSid);
-						console.log(data);
-						iziToast.success({
-							title: "淘宝订单:" + tbOrderId + ",线下出库成功,运单号:" + outSid,
-							message: data,
-							position: 'bottomRight'
-						});
-					}
-				});
+			function tbOutStrageOffLine(bton, tbOrderId, outSid, companyCode) {
+				var rid = $(bton).parent().parent().attr("rid");
+				getShopAccessToken(rid, function(thisToken) {
+					$.ajax({
+						url: "http://106.15.57.246:30001/zboss/data/deliverGoodsOffline",
+						type: "post",
+						data: {
+							"accessToken": thisToken,
+							"tid": tbOrderId,
+							"outSid": outSid,
+							"companyCode": companyCode,
+						},
+						success: function(data) {
+							console.log("淘宝订单:" + tbOrderId + ",线下出库成功,运单号:" + outSid);
+							console.log(data);
+							iziToast.success({
+								title: "淘宝订单:" + tbOrderId + ",线下出库成功,运单号:" + outSid,
+								message: data,
+								position: 'bottomRight'
+							});
+						}
+					});
+				})
 			}
 
 			function tbResponseCheck(data) {
