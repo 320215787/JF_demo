@@ -525,6 +525,7 @@
 					return shopEntity;
 				}
 			}
+
 			var jdTemplateDefinition = {
 				orderTemplateId: 97, //在线订单模板表id
 				orderTemplateFieldKeys: {
@@ -588,6 +589,18 @@
 						orderItemEntity[jdTemplateDefinition.orderDetailTemplateFieldKeys.productNo] = itemInfo.productNo;
 						return orderItemEntity;
 					})
+					return orderEntity;
+				},
+				convertToJDEntity: function(order) {
+					var orderEntity = new Object();
+					orderEntity.orderId = order[jdTemplateDefinition.orderTemplateFieldKeys.orderId];
+					orderEntity.orderTotalPrice = order[jdTemplateDefinition.orderTemplateFieldKeys.orderTotalPrice];
+					orderEntity.pin = order[jdTemplateDefinition.orderTemplateFieldKeys.pin];
+					orderEntity.fullname = order[jdTemplateDefinition.orderTemplateFieldKeys.fullname];
+					orderEntity.fullAddress = order[jdTemplateDefinition.orderTemplateFieldKeys.fullAddress];
+					orderEntity.telephone = order[jdTemplateDefinition.orderTemplateFieldKeys.telephone];
+					orderEntity.mobile = order[jdTemplateDefinition.orderTemplateFieldKeys.mobile];
+					orderEntity.shopName = order[jdTemplateDefinition.orderTemplateFieldKeys.shopName];
 					return orderEntity;
 				},
 				orderDetailTemplateId: 91, //在线订单模板表id
@@ -782,14 +795,92 @@
 			var senderAddress = "陶双杰 13122228216 上海松江区九亭镇同利路551号1栋202";
 			var salePlat = "0010001";
 			var senderTel = "13122779958";
+
+			//从JF获取一条记录
+			function getCustomerInfoFromJF(rid, success) {
+				$.ajax({
+					url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId + "/" + rid, //接口：api/{模板ID}/{记录ID}
+					type: "get",
+					headers: getHeaders(),
+					success: function(result) {
+						var data = result.data.fields;
+						success(jdTemplateDefinition.convertToJDEntity(data));
+					}
+				});
+			}
+
+			function waybillReceive(providerId, orderId) {
+				var rid = $(this).parent().parent().attr("rid");
+				getCustomerInfoFromJF(rid, function(customerInfo) {
+					var param = {
+						"content": {
+							"waybillType": 1,
+							"waybillCount": 1,
+							"providerId": providerId, // 承运商ID
+							//"providerCode": providerCode, //承运商编码
+							//"branchCode": "1001",
+							"platformOrderNo": orderId, //订单ID
+							//"vendorCode": vendorCode, //商家编码
+							"vendorName": customerInfo.shopName, //商家名称
+							"vendorOrderCode": vendorOrderCode, //商家自有订单号
+							"salePlatform": salePlat,
+							"fromAddress": {
+								//"provinceId": 1,
+								//"provinceName": "XXX",
+								//"cityId": 232,
+								//"cityName": "YYY",
+								//"countryId": 1232,
+								//"countryName": "ZZZ",
+								//"countrysideId": 10098,
+								//"countrysideName": "CCC",
+								"address": senderAddress,
+								"contact": senderName,
+								"phone": senderTel,
+								"mobile": senderTel
+							},
+							"toAddress": {
+								//"provinceId": 12,
+								//"provinceName": "XXX",
+								//"cityId": 232,
+								//"cityName": "YYY",
+								//"countryId": 1232,
+								//"countryName": "ZZZ",
+								//	"countrysideId": 10098,
+								//"countrysideName": "CCC",
+								"address": customerInfo.fullAddress,
+								"contact": customerInfo.fullname,
+								"phone": customerInfo.telephone,
+								"mobile": customerInfo.mobile
+							},
+							"weight": 1, //重量 0
+							"volume": 1, //体积 0
+							"payType": 0, //付款方式0-在线支付
+							"shouldPayMoney": 22,
+							"needGuarantee": false,
+							"guaranteeMoney": 10
+						}
+					}
+					$.ajax({
+						type: "post",
+						url: "http://127.0.0.1:8081/zboss/data/waybillReceive",
+						data: {
+							"accessToken": "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
+							"content": JSON.stringify(param)
+						},
+						dataType: 'json',
+						success: function(data) {
+
+						}
+					});
+				})
+			}
+
 			/**
 			 *  获取物流运单号
-			 * @param deliverInfoLogisticsId 物流公司编号
+			 * @param deliverInfoLogisticsId 物流公司编号var rid = $(this).parent().parent().attr("rid");
 			 * @param deliverInfoCodeHandler 物流公司分配的运单号处理函数
 			 */
-
 			function getDeliverInfoCode(orderId, deliverInfoLogisticsId) {
-				//https://api.jd.com/routerjson?v=2.0&method=jingdong.etms.waybillcode.get&app_key=8F3A3F4A4C2C8CC7FC2B351B2F4F785E&access_token=5d2a449c-6de0-40c3-9649-df0c07b6aa64&360buy_param_json={"preNum":"1","customerCode":"021K35939","orderType":"0"}&timestamp=2018-04-21 11:40:03&sign=ED35D1864B807C55752F807B1BE6D61E
 				if(deliverInfoLogisticsId != 2087) {
 					console.log(orderId + "---" + deliverInfoLogisticsId)
 					iziToast.error({
@@ -799,64 +890,75 @@
 					});
 					return;
 				}
-				//var url = 'https://api.jd.com/routerjson?v=2.0&method=jingdong.etms.waybillcode.get&app_key='+shopConfig.app_key+"&access_token="+shopConfig.access_token
-				//   +'&360buy_param_json={"preNum":"1","customerCode":"'+customerCode+'","orderType":"0"}';
+				var rid = $(this).parent().parent().attr("rid");
+				var thisToken = getShopAccessToken(rid);
+				console.log(thisToken);
+				return false;
 				var url = "http://114.67.70.80:8081/zboss/data/getEtmsWaybillCode";
-				var list = [];
 				$.ajax({
 					url: url,
 					type: "post", //使用post方法
 					dataType: 'json',
 					data: {
-						"accessToken": shopConfig.accessToken,
+						"accessToken": thisToken,
 						"preNum": "1",
 						"customerCode": customerCode,
 						"orderType": "0"
 					},
 					success: function(data) {
-						console.log("0");
 						console.log(data);
-						var deliverCode = data[0];
-						console.log("分配的运单号是：" + deliverCode);
-						var row = {};
-						row[jdTemplateDefinition.orderTemplateFieldKeys.deliverInfoCode] = deliverCode;
-						row.key = jdTemplateDefinition.orderTemplateFieldKeys.orderId;
-						row.value = orderId;
-						list.push(row);
-						$.ajax({
-							url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId, //接口：api/{模板ID}
-							type: "put", //使用put方法
-							headers: getHeaders(),
-							data: JSON.stringify(list),
-							success: function() {
-								//location.reload(true);
-								iziToast.success({
-									title: '获取运单号成功!',
-									message: deliverCode,
-									position: 'bottomRight'
-								});
-								self.parent.frames["mainFrame"].location.reload(true);
-							}
-						});
+						saveDeliverCodeToJF(data);
 					}
 				})
 			}
+			/**
+			 * JF保存运单号
+			 * @param {Object} data
+			 */
+			function saveDeliverCodeToJF(data) {
+				var list = [];
+				var deliverCode = data[0];
+				console.log("分配的运单号是：" + deliverCode);
+				var row = {};
+				row[jdTemplateDefinition.orderTemplateFieldKeys.deliverInfoCode] = deliverCode;
+				row.key = jdTemplateDefinition.orderTemplateFieldKeys.orderId;
+				row.value = orderId;
+				list.push(row);
+				$.ajax({
+					url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId, //接口：api/{模板ID}
+					type: "put", //使用put方法
+					headers: getHeaders(),
+					data: JSON.stringify(list),
+					success: function() {
+						//location.reload(true);
+						iziToast.success({
+							title: '获取运单号成功!',
+							message: deliverCode,
+							position: 'bottomRight'
+						});
+						self.parent.frames["mainFrame"].location.reload(true);
+					}
+				});
+
+			}
 
 			function outStrage(orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel) {
+				var rid = $(this).parent().parent().attr("rid");
+				var thisToken = getShopAccessToken(rid);
 				if(deliverInfoLogisticsId == 2087) {
 					//jd快递接单
-					innerSendDeliver(orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, function() {
+					innerSendDeliver(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, function() {
 						//出库
 						console.log("innerOutStorage");
-						innerOutStorage(orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
+						innerOutStorage(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
 					});
 				} else {
-					innerOutStorage(orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
+					innerOutStorage(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount);
 				}
 
 			}
 
-			function innerSendDeliver(orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, successHandler) {
+			function innerSendDeliver(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount, receiveAddress, receiveName, receiveTel, successHandler) {
 				// var url='https://api.jd.com/routerjson?v=2.0&method=jingdong.etms.waybill.send&app_key='+shopConfig.app_key+'&access_token='+shopConfig.access_token
 				//     +'&360buy_param_json={"deliveryId":"'
 				//     +deliverInfoCode+'","salePlat":"'+salePlat+'","customerCode":"'+customerCode+'","orderId":"'+orderId+'","thrOrderId":"","selfPrintWayBill":"","pickMethod":"","packageRequired":"","senderName":"'
@@ -867,7 +969,7 @@
 					url: url,
 					type: 'post',
 					data: {
-						"accessToken": shopConfig.accessToken,
+						"accessToken": thisToken,
 						"deliveryId": deliverInfoCode,
 						"salePlat": salePlat,
 						"customerCode": customerCode,
@@ -943,7 +1045,7 @@
 				})
 			}
 
-			function innerOutStorage(orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount) {
+			function innerOutStorage(thisToken,orderId, deliverInfoLogisticsId, deliverInfoCode, packageCount) {
 				//var url = 'https://api.jd.com/routerjson?v=2.0&method=360buy.order.sop.outstorage&app_key='+shopConfig.app_key+"&access_token="+shopConfig.access_token
 				//   +'&360buy_param_json={"logistics_id":"'+deliverInfoLogisticsId+'","waybill":"'+deliverInfoCode+'","order_id":"'+orderId+'","trade_no":""}';
 
@@ -952,7 +1054,7 @@
 					url: url,
 					type: 'post',
 					data: {
-						"accessToken": shopConfig.accessToken,
+						"accessToken": thisToken,
 						"logisticsId": deliverInfoLogisticsId,
 						"waybill": deliverInfoCode,
 						"orderId": orderId,
@@ -982,6 +1084,20 @@
 					}
 				}
 			};
+			/**
+			 * 
+			 * @param {Object} rid
+			 */
+			function getShopAccessToken(rid) {
+				getCustomerInfoFromJF(rid, function(customerInfo) {
+					var allShops = jdShopConfigs.concat(tbShopConfigs);
+					allShops.forEach(function(shop) {
+						if(customerInfo.shopName == shop.shopName) {
+							return shop.accessToken;
+						}
+					})
+				})
+			}
 
 			function loadShopFormJF() {
 				$.ajax({
@@ -1313,11 +1429,13 @@
 			}
 
 			function tbOutStrageOnLine(tbOrderId, companyCode) {
+				var rid = $(this).parent().parent().attr("rid");
+				var thisToken = getShopAccessToken(rid);
 				$.ajax({
 					url: "http://106.15.57.246:30001/zboss/data/deliverGoodsOnline",
 					type: "post",
 					data: {
-						"accessToken": tbShopConfig.accessToken,
+						"accessToken": thisToken,
 						"tid": tbOrderId,
 						"companyCode": companyCode,
 					},
@@ -1334,11 +1452,13 @@
 			}
 
 			function tbOutStrageOffLine(tbOrderId, outSid, companyCode) {
+				var rid = $(this).parent().parent().attr("rid");
+				var thisToken = getShopAccessToken(rid);
 				$.ajax({
 					url: "http://106.15.57.246:30001/zboss/data/deliverGoodsOffline",
 					type: "post",
 					data: {
-						"accessToken": tbShopConfig.accessToken,
+						"accessToken": thisToken,
 						"tid": tbOrderId,
 						"outSid": outSid,
 						"companyCode": companyCode,
@@ -1368,6 +1488,7 @@
 					}
 				}
 			};
+			
 			$(function() {
 				console.log("reday exc apiCallerInit");
 				apiCallerInit();
