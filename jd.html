@@ -892,25 +892,26 @@
 				}
 				var rid = $(bton).parent().parent().attr("rid");
 				console.log(rid);
-				var thisToken = getShopAccessToken(rid);
-				console.log(thisToken);
-				return false;
-				var url = "http://114.67.70.80:8081/zboss/data/getEtmsWaybillCode";
-				$.ajax({
-					url: url,
-					type: "post", //使用post方法
-					dataType: 'json',
-					data: {
-						"accessToken": thisToken,
-						"preNum": "1",
-						"customerCode": customerCode,
-						"orderType": "0"
-					},
-					success: function(data) {
-						console.log(data);
-						saveDeliverCodeToJF(data);
-					}
-				})
+				var thisToken = getShopAccessToken(rid, function(thisToken) {
+					console.log(thisToken);
+					return false;
+					var url = "http://114.67.70.80:8081/zboss/data/getEtmsWaybillCode";
+					$.ajax({
+						url: url,
+						type: "post", //使用post方法
+						dataType: 'json',
+						data: {
+							"accessToken": thisToken,
+							"preNum": "1",
+							"customerCode": customerCode,
+							"orderType": "0"
+						},
+						success: function(data) {
+							console.log(data);
+							saveDeliverCodeToJF(data);
+						}
+					})
+				});
 			}
 			/**
 			 * JF保存运单号
@@ -1089,20 +1090,25 @@
 			 * 
 			 * @param {Object} rid
 			 */
-			function getShopAccessToken(rid) {
-				var thisAccessToken = "";
-				getCustomerInfoFromJF(rid, function(customerInfo) {
-					console.log(customerInfo)
-					var allShops = jdShopConfigs.concat(tbShopConfigs);
-					console.log(allShops);
-					allShops.forEach(function(thisShop) {
-						if(thisShop.shopName == customerInfo.shopName) {
-							thisAccessToken = thisShop.accessToken;
-						}
-					})
-				})
-				console.log(thisAccessToken);
-				return thisAccessToken;
+			function getShopAccessToken(rid, success) {
+
+				$.ajax({
+					url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId + "/" + rid, //接口：api/{模板ID}/{记录ID}
+					type: "get",
+					headers: getHeaders(),
+					success: function(result) {
+						var data = result.data.fields;
+						var customerInfo = jdTemplateDefinition.convertToJDEntity(data);
+						var allShops = jdShopConfigs.concat(tbShopConfigs);
+						var thisAccessToken = "";
+						allShops.forEach(function(thisShop) {
+							if(thisShop.shopName == customerInfo.shopName) {
+								thisAccessToken = thisShop.accessToken;
+							}
+						})
+						success(thisAccessToken);
+					}
+				});
 			}
 
 			function loadShopFormJF() {
