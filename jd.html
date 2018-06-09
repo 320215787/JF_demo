@@ -797,95 +797,82 @@
 			var senderTel = "13122779958";
 
 			//从JF获取一条记录
-			function getCustomerInfoFromJF(rid) {
+			function getCustomerInfoFromJF(rid, success) {
 				$.ajax({
 					url: baseUrl + "/api/" + jdTemplateDefinition.orderTemplateId + "/" + rid, //接口：api/{模板ID}/{记录ID}
 					type: "get",
 					headers: getHeaders(),
 					success: function(result) {
 						var data = result.data.fields;
-						return jdTemplateDefinition.convertToJDEntity(data);
-					},
-					error: function(xhr, status, error) {
-						if(status == 403) {
-							iziToast.error({
-								title: '蓝点系统登陆过期！',
-								message: 'apicaller登陆过期，已尝试自动重新登陆。请重新进行你的操作。'
-							});
-							apiCallerInit();
-						} else {
-							iziToast.error({
-								title: '蓝点系统调用失败',
-								message: 'apicaller无法调用蓝点API！'
-							});
-						}
+						success(jdTemplateDefinition.convertToJDEntity(data));
 					}
 				});
 			}
 
 			function waybillReceive(providerId, orderId) {
 				var rid = $(this).parent().parent().attr("rid");
-				var customerInfo = getCustomerInfoFromJF(rid)
-				var param = {
-					"content": {
-						"waybillType": 1,
-						"waybillCount": 1,
-						"providerId": providerId, // 承运商ID
-						//"providerCode": providerCode, //承运商编码
-						//"branchCode": "1001",
-						"platformOrderNo": orderId, //订单ID
-						//"vendorCode": vendorCode, //商家编码
-						"vendorName": customerInfo.shopName, //商家名称
-						"vendorOrderCode": vendorOrderCode, //商家自有订单号
-						"salePlatform": salePlat,
-						"fromAddress": {
-							//"provinceId": 1,
-							//"provinceName": "XXX",
-							//"cityId": 232,
-							//"cityName": "YYY",
-							//"countryId": 1232,
-							//"countryName": "ZZZ",
-							//"countrysideId": 10098,
-							//"countrysideName": "CCC",
-							"address": senderAddress,
-							"contact": senderName,
-							"phone": senderTel,
-							"mobile": senderTel
-						},
-						"toAddress": {
-							//"provinceId": 12,
-							//"provinceName": "XXX",
-							//"cityId": 232,
-							//"cityName": "YYY",
-							//"countryId": 1232,
-							//"countryName": "ZZZ",
-							//	"countrysideId": 10098,
-							//"countrysideName": "CCC",
-							"address": customerInfo.fullAddress,
-							"contact": customerInfo.fullname,
-							"phone": customerInfo.telephone,
-							"mobile": customerInfo.mobile
-						},
-						"weight": 1, //重量 0
-						"volume": 1, //体积 0
-						"payType": 0, //付款方式0-在线支付
-						"shouldPayMoney": 22,
-						"needGuarantee": false,
-						"guaranteeMoney": 10
+				getCustomerInfoFromJF(rid, function(customerInfo) {
+					var param = {
+						"content": {
+							"waybillType": 1,
+							"waybillCount": 1,
+							"providerId": providerId, // 承运商ID
+							//"providerCode": providerCode, //承运商编码
+							//"branchCode": "1001",
+							"platformOrderNo": orderId, //订单ID
+							//"vendorCode": vendorCode, //商家编码
+							"vendorName": customerInfo.shopName, //商家名称
+							"vendorOrderCode": vendorOrderCode, //商家自有订单号
+							"salePlatform": salePlat,
+							"fromAddress": {
+								//"provinceId": 1,
+								//"provinceName": "XXX",
+								//"cityId": 232,
+								//"cityName": "YYY",
+								//"countryId": 1232,
+								//"countryName": "ZZZ",
+								//"countrysideId": 10098,
+								//"countrysideName": "CCC",
+								"address": senderAddress,
+								"contact": senderName,
+								"phone": senderTel,
+								"mobile": senderTel
+							},
+							"toAddress": {
+								//"provinceId": 12,
+								//"provinceName": "XXX",
+								//"cityId": 232,
+								//"cityName": "YYY",
+								//"countryId": 1232,
+								//"countryName": "ZZZ",
+								//	"countrysideId": 10098,
+								//"countrysideName": "CCC",
+								"address": customerInfo.fullAddress,
+								"contact": customerInfo.fullname,
+								"phone": customerInfo.telephone,
+								"mobile": customerInfo.mobile
+							},
+							"weight": 1, //重量 0
+							"volume": 1, //体积 0
+							"payType": 0, //付款方式0-在线支付
+							"shouldPayMoney": 22,
+							"needGuarantee": false,
+							"guaranteeMoney": 10
+						}
 					}
-				}
-				$.ajax({
-					type: "post",
-					url: "http://127.0.0.1:8081/zboss/data/waybillReceive",
-					data: {
-						"accessToken": "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
-						"content": JSON.stringify(param)
-					},
-					dataType: 'json',
-					success: function(data) {
+					$.ajax({
+						type: "post",
+						url: "http://127.0.0.1:8081/zboss/data/waybillReceive",
+						data: {
+							"accessToken": "16d79d3c-e1c5-4bfa-8463-a65c0fcfcdf6",
+							"content": JSON.stringify(param)
+						},
+						dataType: 'json',
+						success: function(data) {
 
-					}
-				});
+						}
+					});
+				})
 			}
 
 			/**
@@ -1104,15 +1091,15 @@
 			 */
 			function getShopAccessToken(rid) {
 				var accessToken = "";
-				var customerInfo = getCustomerInfoFromJF(rid)
-				console.log(customerInfo)
-				var allShops = jdShopConfigs.concat(tbShopConfigs);
-				console.log(allShops);
-				allShops.forEach(function(shop) {
-					if(customerInfo.shopName == shop.shopName) {
-						accessToken = shop.accessToken;
-						break;
-					}
+				getCustomerInfoFromJF(rid, function(customerInfo) {
+					console.log(customerInfo)
+					var allShops = jdShopConfigs.concat(tbShopConfigs);
+					allShops.forEach(function(shop) {
+						if(customerInfo.shopName == shop.shopName) {
+							accessToken = shop.accessToken;
+							break;
+						}
+					})
 				})
 				return accessToken;
 			}
