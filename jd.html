@@ -1098,7 +1098,7 @@
 					allShops.forEach(function(shop) {
 						if(customerInfo.shopName == shop.shopName) {
 							accessToken = shop.accessToken;
-							break;
+							return;
 						}
 					})
 				})
