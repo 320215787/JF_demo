@@ -891,6 +891,7 @@
 					return;
 				}
 				var rid = $(this).parent().parent().attr("rid");
+				console.log(rid);
 				var thisToken = getShopAccessToken(rid);
 				console.log(thisToken);
 				return false;
@@ -1090,6 +1091,7 @@
 			 */
 			function getShopAccessToken(rid) {
 				getCustomerInfoFromJF(rid, function(customerInfo) {
+					console.log(customerInfo)
 					var allShops = jdShopConfigs.concat(tbShopConfigs);
 					allShops.forEach(function(shop) {
 						if(customerInfo.shopName == shop.shopName) {
