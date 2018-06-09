@@ -1094,6 +1094,7 @@
 				getCustomerInfoFromJF(rid, function(customerInfo) {
 					console.log(customerInfo)
 					var allShops = jdShopConfigs.concat(tbShopConfigs);
+					console.log(allShops);
 					allShops.forEach(function(shop) {
 						if(customerInfo.shopName == shop.shopName) {
 							accessToken = shop.accessToken;
