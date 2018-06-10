@@ -886,10 +886,10 @@
 			 * @param deliverInfoCodeHandler 物流公司分配的运单号处理函数
 			 */
 			function getDeliverInfoCode(bton, orderId, deliverInfoLogisticsId) {
-				if(deliverInfoLogisticsId != 2087 || deliverInfoLogisticsId != 1499) {
+				if(deliverInfoLogisticsId != 2087) {
 					console.log(orderId + "---" + deliverInfoLogisticsId)
 					iziToast.error({
-						title: '只有京东快递与中通快递可以获取运单号!',
+						title: '只有京东快递可以获取运单号!',
 						message: "",
 						position: 'bottomRight'
 					});
