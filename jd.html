@@ -912,7 +912,7 @@
 							},
 							success: function(data) {
 								console.log(data);
-								saveDeliverCodeToJF(data);
+								saveDeliverCodeToJF(data,orderId);
 							}
 						})
 					}
@@ -925,7 +925,7 @@
 			 * JF保存运单号
 			 * @param {Object} data
 			 */
-			function saveDeliverCodeToJF(data) {
+			function saveDeliverCodeToJF(data,orderId) {
 				var list = [];
 				var deliverCode = data[0];
 				console.log("分配的运单号是：" + deliverCode);
